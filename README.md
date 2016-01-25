@@ -13,6 +13,7 @@ Canal MySql RabbitMQ Redis 的nosql同步 （多读、nosql延时不严格 需�
 数据：mysql->binlog->MQ->redis(不过期、关闭RDB、AOF) （nosql数据仅用crontab脚本维护）
 
 请求：http->webserver->redis(有数据)->返回数据 （完全避免用户直接读取mysql）
+
                     ->redis(无数据)->返回空
 
 
@@ -31,9 +32,14 @@ Mysql Redis/memcached nosql的缓存 （多读写需求）
 5.恢复节点数据
 
 请求：http->webserver->【业务寻址hash节点】->1.redis(有数据)-> 返回数据
+
 									    ->2.redis(无数据)-> mysql (并写入数据redis) -> 返回数据
+
 									    ->3.redis节点挂掉-> 业务寻址hash替代节点 -> redis(有数据) -> 返回数据
-									                                          -> redis(无数据) -> mysql (并写入数据redis) -> 返回数据
+
+									                                          -> redis(无数据) -> mysql (
+
+									                                          并写入数据redis) -> 返回数据
 
 .....end 后续。。。
 
