@@ -10,7 +10,9 @@ Canal MySql RabbitMQ Redis 的nosql同步 （多读、nosql延时不严格 需�
 
 	5.数据写入/修改到nosql （redis的主从）
 
-	数据：mysql->binlog->MQ->redis(不过期、关闭RDB、AOF) （nosql数据仅用crontab脚本维护）
+	6.保证对应关系的简单性：一个mysql表对应一个 redis实例（redis单线程，多实例保证分流不阻塞），关联关系数据交给接口业务
+
+	数据：mysql->binlog->MQ->redis(不过期、关闭RDB、AOF保证读写性能) （nosql数据仅用crontab脚本维护）
 
 	请求：http->webserver->redis(有数据)->返回数据 （完全避免用户直接读取mysql）
 
