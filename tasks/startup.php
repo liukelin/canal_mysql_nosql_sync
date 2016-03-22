@@ -2,7 +2,7 @@
 /**
  * 此文件用于cli模式运行
  * 
- * 基于redis的任务队列，类似于python celery，可用rabbitMQ代替redis可靠。
+ * 基于redis的任务队列，类似于python celery，可用rabbitMQ代替redis消费更可靠。
  * liukelin 
  **/
 defined('__URL__') or define('__URL__',dirname(__FILE__).DIRECTORY_SEPARATOR); 
@@ -44,7 +44,7 @@ class celery{
 	}
 	
 	/**
-	 * 获取执行数据
+	 * 获取执行队列数据
 	 */
 	public function get_queue_data(){
 		global $config;
@@ -65,10 +65,10 @@ class celery{
 		//执行
 		$ret = $this->start_up($data['fun'], $data['args']);
 		if (!$ret) {
-			#回滚 数据还原
+			#消费失败 数据回归队列
 			$redis->zadd($this->queue_key , $data['key'], $json);
 		}
-		return true;
+		return $ret;
 	}
 	
 	/**
@@ -85,6 +85,24 @@ class celery{
 		}
 	}
 }
+
+//run 
+//开启进程数量
+$processNo = 5;
+
+$on_out = system('ps -ef | grep "startup.php" | grep -v "grep" | wc -l',$out);
+if (intval(trim($on_out)) > ($processNo+1)){
+	exit('error on start!');
+}
+
+$st = new celery();
+$st->get_queue_data();
+
+
+
+
+
+
 
 
 
