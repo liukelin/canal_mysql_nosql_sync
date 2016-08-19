@@ -45,7 +45,8 @@ Mysql Redis/memcached nosql的缓存 （多读写需求）
 										                                          并写入数据redis) -> 返回数据
 
 
-===============部署===============
+部署(详情查看wiki):
+
 	阿里canal纯java开发，所以要先安装java环境
 
 安装jdk(推荐jdk1.8):
@@ -74,7 +75,7 @@ canal server 配置启动：
 	
 	canal server 模拟mysql从库并向mysql发送dump命令获取mysql binlog数据。
 	
-	1.下载解压项目，这里提供了1.0.22版本，/canal_server 可从下载最新版本：https://github.com/alibaba/canal/releases
+	1.下载解压项目，这里提供了1.0.22版本:canal.deployer-1.0.22.tar.gz 可从下载最新版本：https://github.com/alibaba/canal/releases
 	
 	2.配置项目：
 		# 公共配置
@@ -88,7 +89,7 @@ canal server 配置启动：
 		$ sudo vim conf/example/instance.properties
 			
 			# position info
-			canal.instance.master.address = 127.0.0.1:3306 # mysql连接
+			canal.instance.master.address = 127.0.0.1:3306  # mysql连接
 			
 			canal.instance.dbUsername = canal  		# mysql账号
 			canal.instance.dbPassword = canal		# 密码
@@ -96,28 +97,33 @@ canal server 配置启动：
 			canal.instance.connectionCharset = UTF-8	# mysql编码
 		
 		保存退出。
+		
 		更多配置查看：http://agapple.iteye.com/blog/1831873
 		
 	3.启动：
 		$ sh bin/startup.sh
+		
+	日志文件：$ less logs/canal/canal.log	   # canal server端运行日志
+		  $ less logs/example/example.log  # canal client端连接日志
+		  $ logs/example/meta.log 	   # 实例binlog 读取记录文件
 
 canal client 配置启动：
 	
 	canal client将从canal server获取的binlog数据最终以json行格式保存到指定文件。
 	
-	1.下载解压项目，这里自己写了个基于1.0.22版本的项目/canal_client , 源码查看：
+	1.下载解压项目，这里自己写了个基于1.0.22版本的项目:canal_client1.0.22.zip, 源码查看：
 		
 	2.基本配置
 		
 		$vim conf/canal.properties
 		
-		# cancal server host。 canal server的连接IP
+		# cancal server host， canal server的连接IP
 		canal.server.host = 127.0.0.1
 		
-		# cancal server port。canal server的连接端口 
+		# cancal server port，canal server的连接端口 
 		canal.server.port = 11111
 		
-		# 实例 默认 example/instance.properties
+		# 实例 默认 example
 		canal.server.instance = example
 		
 		# 每次获取binlog数据 行数
