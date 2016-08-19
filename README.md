@@ -89,7 +89,7 @@ canal server 配置启动：
 		$ sudo vim conf/example/instance.properties
 			
 			# position info
-			canal.instance.master.address = 127.0.0.1:3306 # mysql连接
+			canal.instance.master.address = 127.0.0.1:3306  # mysql连接
 			
 			canal.instance.dbUsername = canal  		# mysql账号
 			canal.instance.dbPassword = canal		# 密码
@@ -97,10 +97,15 @@ canal server 配置启动：
 			canal.instance.connectionCharset = UTF-8	# mysql编码
 		
 		保存退出。
+		
 		更多配置查看：http://agapple.iteye.com/blog/1831873
 		
 	3.启动：
 		$ sh bin/startup.sh
+		
+	日志文件：$ less logs/canal/canal.log	   # canal server端运行日志
+		  $ less logs/example/example.log  # canal client端连接日志
+		  $ logs/example/meta.log 	   # 实例binlog 读取记录文件
 
 canal client 配置启动：
 	
@@ -112,13 +117,13 @@ canal client 配置启动：
 		
 		$vim conf/canal.properties
 		
-		# cancal server host。 canal server的连接IP
+		# cancal server host， canal server的连接IP
 		canal.server.host = 127.0.0.1
 		
-		# cancal server port。canal server的连接端口 
+		# cancal server port，canal server的连接端口 
 		canal.server.port = 11111
 		
-		# 实例 默认 example/instance.properties
+		# 实例 默认 example
 		canal.server.instance = example
 		
 		# 每次获取binlog数据 行数
