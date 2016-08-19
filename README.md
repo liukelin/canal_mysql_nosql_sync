@@ -1,4 +1,4 @@
-Canal MySql RabbitMQ Redis 的nosql同步 （多读、nosql延时不严格 需求）
+Canal MySql RabbitMQ Redis/memcached/mongodb 的nosql同步 （多读、nosql延时不严格 需求）
 
 	1.mysql主从配置
 
@@ -17,7 +17,6 @@ Canal MySql RabbitMQ Redis 的nosql同步 （多读、nosql延时不严格 需�
 	请求：http->webserver->redis(有数据)->返回数据 （完全避免用户直接读取mysql）
 
 	                    ->redis(无数据)->返回空
-
 
 
 
@@ -47,7 +46,7 @@ Mysql Redis/memcached nosql的缓存 （多读写需求）
 
 
 ===============部署===============
-阿里canal纯java开发，所以要先安装java环境
+	阿里canal纯java开发，所以要先安装java环境
 
 安装jdk(推荐jdk1.8):
 	安装过程参考网上资料，（注意环境变量配置）
@@ -73,13 +72,15 @@ mysql配置：
 
 canal server 配置启动：
 	
-	1.下载解压项目，这里提供了1.0.22版本，可从下载最新版本：https://github.com/alibaba/canal/releases
+	canal server 模拟mysql从库并向mysql发送dump命令获取mysql binlog数据。
+	
+	1.下载解压项目，这里提供了1.0.22版本，/canal_server 可从下载最新版本：https://github.com/alibaba/canal/releases
 	
 	2.配置项目：
 		# 公共配置
 		$ sudo vim conf/canal.properties
 			
-			canal.port= 11111 # 保证该端口为占用状态，或者使用其他未占用端口
+			canal.port= 11111 # canal server 运行端口，保证该端口为占用状态，或者使用其他未占用端口
 		
 		保存退出。
 		
@@ -91,7 +92,7 @@ canal server 配置启动：
 			
 			canal.instance.dbUsername = canal  		# mysql账号
 			canal.instance.dbPassword = canal		# 密码
-			canal.instance.defaultDatabaseName = duobao	# 需要同步的库名
+			canal.instance.defaultDatabaseName = test	# 需要同步的库名
 			canal.instance.connectionCharset = UTF-8	# mysql编码
 		
 		保存退出。
@@ -102,7 +103,40 @@ canal server 配置启动：
 
 canal client 配置启动：
 	
-	1.下载解压项目，这里提供了1.0.22版本，
+	canal client将从canal server获取的binlog数据最终以json行格式保存到指定文件。
+	
+	1.下载解压项目，这里自己写了个基于1.0.22版本的项目/canal_client , 源码查看：
+		
+	2.基本配置
+		
+		$vim conf/canal.properties
+		
+		# cancal server host。 canal server的连接IP
+		canal.server.host = 127.0.0.1
+		
+		# cancal server port。canal server的连接端口 
+		canal.server.port = 11111
+		
+		# 实例 默认 example/instance.properties
+		canal.server.instance = example
+		
+		# 每次获取binlog数据 行数
+		canal.batchsize = 1000
+		
+		# 每次获取等待时间单位/ms
+		canal.sleep = 1000
+		
+		# 数据保存路径 ，自行指定
+		canal.binlog.dir = /home/deploy/log/db_data
+		
+		保存退出。
+	
+	3.启动：
+	
+		$ sh start_canal_client.sh
+		
+	
+
 
 		
 .....end 后续。。。
