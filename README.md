@@ -45,7 +45,8 @@ Mysql Redis/memcached nosql的缓存 （多读写需求）
 										                                          并写入数据redis) -> 返回数据
 
 
-===============部署===============
+部署(详情查看wiki):
+
 	阿里canal纯java开发，所以要先安装java环境
 
 安装jdk(推荐jdk1.8):
