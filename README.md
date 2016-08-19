@@ -75,7 +75,7 @@ canal server 配置启动：
 	
 	canal server 模拟mysql从库并向mysql发送dump命令获取mysql binlog数据。
 	
-	1.下载解压项目，这里提供了1.0.22版本，/canal_server 可从下载最新版本：https://github.com/alibaba/canal/releases
+	1.下载解压项目，这里提供了1.0.22版本:canal.deployer-1.0.22.tar.gz 可从下载最新版本：https://github.com/alibaba/canal/releases
 	
 	2.配置项目：
 		# 公共配置
@@ -111,7 +111,7 @@ canal client 配置启动：
 	
 	canal client将从canal server获取的binlog数据最终以json行格式保存到指定文件。
 	
-	1.下载解压项目，这里自己写了个基于1.0.22版本的项目/canal_client , 源码查看：
+	1.下载解压项目，这里自己写了个基于1.0.22版本的项目:canal_client1.0.22.zip, 源码查看：
 		
 	2.基本配置
 		
