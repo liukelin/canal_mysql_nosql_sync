@@ -133,7 +133,7 @@ canal client 配置启动：
 		canal.sleep = 1000
 		
 		# 数据保存路径 ，自行指定
-		canal.binlog.dir = /home/deploy/log/db_data
+		canal.binlog.dir = db_data
 		
 		保存退出。
 	
@@ -143,9 +143,13 @@ canal client 配置启动：
 		
 
 最终结果：
-        /home/deploy/log/db_data/binlog_xxxx.log
+        $less db_data/binlog_xxxx.log
  
-        {"binlog":"mysql-bin.000008:26280","db":"duobao","table":"orders_code","eventType":"INSERT","before":"","after":{"code":"10000027","code_id":"339","create_time":"2016-08-21 16:48:46","orders_id":"145","orders_no":"20160821164844108919","period_id":"17","uid":"1","user":"123"},"time":"2016-08-22 09:53:28"}
+        {"binlog":"mysql-bin.000009:1235","db":"duobao","table":"users","eventType":"UPDATE","before":{"email":"","password":"123456","phone":"","tid":"153713294","uid":"8","username":"duobao153713223"},"after":{"email":"","password":"123456","phone":"137633822321","tid":"153713294","uid":"8","username":"duobao153713223"},"time":"2016-08-22 17:47:25"}
+
+        {"binlog":"mysql-bin.000009:1533","db":"duobao","table":"users","eventType":"DELETE","before":"","after":{"email":"","password":"123456","phone":"137633822321","tid":"153713294","uid":"8","username":"duobao153713223"},"time":"2016-08-22 17:48:09"}
+
+        {"binlog":"mysql-bin.000009:1790","db":"duobao","table":"users","eventType":"INSERT","before":"","after":{"email":"","password":"","phone":"","tid":"1536328122","uid":"9","username":"test2"},"time":"2016-08-22 17:48:45"}
 
 消费数据：（这里使用python/rabbitmq/redis 作为案例，实际可根据业务需求）
         
