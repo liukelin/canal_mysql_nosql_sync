@@ -2,13 +2,13 @@ Canal MySql RabbitMQ Redis/memcached/mongodb 的nosql同步 （多读、nosql延
 
 	1.mysql主从配置
 
-	2.对从库 mysql binlog(row) parser 这一步交给canal
+	2.对mysql binlog(row) parser 这一步交给canal
 
 	3.MQ对解析后binlog增量数据的推送
 
 	4.对MQ数据的消费（接收+数据解析，考虑消费速度，MQ队列的阻塞）
 
-	5.数据写入/修改到nosql （redis的主从）
+	5.数据写入/修改到nosql （redis的主从/hash分片）
 
 	6.保证对应关系的简单性：一个mysql表对应一个 redis实例（redis单线程，多实例保证分流不阻塞），关联关系数据交给接口业务
 
