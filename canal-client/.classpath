@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/canal.client-1.0.22.jar"/>
+	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/canal.common-1.0.22.jar"/>
+	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/canal.example-1.0.22.jar"/>
+	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/canal.protocol-1.0.22.jar"/>
+	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/commons-io-2.4.jar"/>
+	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/commons-lang-2.6.jar"/>
+	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/fastjson-1.1.35.jar"/>
+	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/guava-18.0.jar"/>
+	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/jcl-over-slf4j-1.7.12.jar"/>
+	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/log4j-1.2.14.jar"/>
+	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/logback-classic-1.1.3.jar"/>
+	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/logback-core-1.1.3.jar"/>
+	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/netty-3.2.5.Final.jar"/>
+	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/protobuf-java-2.4.1.jar"/>
+	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/slf4j-api-1.7.12.jar"/>
+	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/spring-2.5.6.jar"/>
+	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/zkclient-0.1.jar"/>
+	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/zookeeper-3.4.5.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
