@@ -142,6 +142,11 @@ canal client 配置启动：
 		$ sh start_canal_client.sh
 		
 
+最终结果：
+ /home/deploy/log/db_data/binlog_xxxx.log
+ 
+ {"binlog":"mysql-bin.000008:26280","db":"duobao","table":"orders_code","eventType":"INSERT","before":"","after":{"code":"10000027","code_id":"339","create_time":"2016-08-21 16:48:46","orders_id":"145","orders_no":"20160821164844108919","period_id":"17","uid":"1","user":"123"},"time":"2016-08-22 09:53:28"}
+
 消费数据：
 	如：client1和client2 需要消费这些数据， 他们得到的数据一样
 	开始考虑直接用队列：
