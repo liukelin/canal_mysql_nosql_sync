@@ -162,7 +162,6 @@ canal client 配置启动：
 	nosql: redis
 	
 	
-	
 	多项目订阅需求，如：client1和client2 需要消费这些数据， 他们得到的数据一样
 	开始考虑直接用队列：
 	队列数据： [A, B, C, D] 
@@ -175,7 +174,8 @@ canal client 配置启动：
 	           消费进程2：获取CD
 	
 	这样的话，如果使用rabbitMQ 就必须给每个 client 提供独立的队列。并独立消费
-	使用kafka，利用他的分组group,每个client 为一个组，这样就可保证，数据给每个组一致。
+	1、使用kafka，利用他的分组group,每个client 为一个组，这样就可保证，数据给每个组一致。
+	2、对每个项目需求开独立的实例进程
 	
 
 
