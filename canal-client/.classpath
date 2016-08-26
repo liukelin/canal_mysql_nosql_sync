@@ -21,5 +21,6 @@
 	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/spring-2.5.6.jar"/>
 	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/zkclient-0.1.jar"/>
 	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/zookeeper-3.4.5.jar"/>
+	<classpathentry kind="lib" path="/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/lib/rabbitmq-client.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

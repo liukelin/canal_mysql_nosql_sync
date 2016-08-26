@@ -8,9 +8,10 @@
 package canal.client;
 
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map; //数组
-import java.util.HashMap;// 数组
+import java.util.Map; 
+import java.util.HashMap;
 
 import com.alibaba.otter.canal.client.CanalConnector;
 import com.alibaba.otter.canal.client.CanalConnectors;
@@ -28,11 +29,11 @@ import java.util.Properties;
 import java.io.InputStream;   
 import java.io.IOException;
 import java.io.FileInputStream;
-import java.io.UnsupportedEncodingException;
 //import java.io.UnsupportedEncodingException;
 
-//输出时间
+//时间
 import java.util.Date;
+import java.util.concurrent.TimeoutException;
 import java.text.SimpleDateFormat;
 
 //写入文件
@@ -40,21 +41,43 @@ import java.io.FileWriter;
 //url encode
 //import java.net.URLEncoder;
 
+//rabbitmq(rabbitmq-client.jar)
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.MessageProperties;
+
+
 public class CanalClientTest {
 	
 	private static String path = CanalClientTest.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 	public static String canal_print = "0";
+	
+	//canal server
+	public static String host = "127.0.0.1";
+	public static int port = 11111;
+	public static String instance = "example";
+	public static int batchSize = 1000;     //每次获取数据数量
+	public static int sleep = 1000; 		//无数据时等待时间
+	
+	//file
 	public static String canal_binlog_filename = "h"; //保存文件名
 	public static String data_dir = "data"; //数据保存路径
+	
+	//mq
+	public static String canal_mq; // redis/rabbitmq/kafka
+	
+	//rabbitmq
+	public static String rabbitmq_host = "127.0.0.1";
+	public static int rabbitmq_port = 5672;
+	public static String rabbitmq_user = "";
+	public static String rabbitmq_pass = "";
+	public static String rabbitmq_queuename = "canal_binlog_data"; //队列名称
+	public static String rabbitmq_ack = "false"; //是否ack
 	
 	public static void main(String args[]) {
 		String conf_path = path.substring(0, path.lastIndexOf("/")) + "/conf/canal.properties";
 		//String host = AddressUtils.getHostIp()
-		String host = "127.0.0.1";
-		int port = 11111;
-		String instance = "example";
-        int batchSize = 1000;  //每次获取数据数量
-        int sleep = 1000; //无数据时等待时间
         
         System.out.println("#=====canal client====================\r\n#=====2016====================\r\n" +
         				   "#=====liukelin====================\r\n" +
@@ -77,6 +100,15 @@ public class CanalClientTest {
             String conf_filename = prop.getProperty("canal.binlog.filename").trim();
             String conf_print = prop.getProperty("canal.print").trim();
             
+            String conf_rabbitmq_host = prop.getProperty("rabbitmq.host").trim();
+        	String conf_rabbitmq_port = prop.getProperty("rabbitmq.port").trim();
+        	String conf_rabbitmq_user = prop.getProperty("rabbitmq.user").trim();
+        	String conf_rabbitmq_pass = prop.getProperty("rabbitmq.pass").trim();
+        	String conf_rabbitmq_queuename = prop.getProperty("rabbitmq.queuename").trim();
+        	String conf_rabbitmq_ack = prop.getProperty("rabbitmq.ack").trim();
+        	
+        	canal_mq = prop.getProperty("canal.mq").trim();
+            
             if ( conf_instance!= null && conf_instance!=""){
             	instance = conf_instance;
             }
@@ -94,6 +126,25 @@ public class CanalClientTest {
             }
             if (conf_print!= null && conf_print!=""){
             	canal_print = conf_print;
+            }
+            
+            if (conf_rabbitmq_host!= null && conf_rabbitmq_host!=""){
+            	rabbitmq_host = conf_rabbitmq_host;
+            }
+            if (conf_rabbitmq_port!= null && conf_rabbitmq_port!=""){
+            	rabbitmq_port = Integer.parseInt(conf_rabbitmq_port);
+            }
+            if (conf_rabbitmq_user!= null && conf_rabbitmq_user!=""){
+            	rabbitmq_user = conf_rabbitmq_user;
+            }
+            if (conf_rabbitmq_pass!= null && conf_rabbitmq_pass!=""){
+            	rabbitmq_pass = conf_rabbitmq_pass;
+            }
+            if (conf_rabbitmq_queuename!= null && conf_rabbitmq_queuename!=""){
+            	rabbitmq_queuename = conf_rabbitmq_queuename;
+            }
+            if (conf_rabbitmq_ack!= null && conf_rabbitmq_ack!=""){
+            	rabbitmq_ack = conf_rabbitmq_ack;
             }
             
             System.out.println("#=====host:"+host+":"+port+ "\r\n#=====instance:"+instance+"\r\n");
@@ -134,8 +185,7 @@ public class CanalClientTest {
   
                 connector.ack(batchId); // 提交确认  
                 // connector.rollback(batchId); // 处理失败, 回滚数据  
-            }  
-  
+            }
             //System.out.println("empty too many times, exit");
         } finally {
         	System.out.println("connect error!");
@@ -147,8 +197,11 @@ public class CanalClientTest {
     	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String timeStr = df.format(new Date()); // new Date()为获取当前系统时间
     	
-    	//循环每行binlog
-        for (Entry entry : entrys) {  
+        ArrayList<String> dataArray = new ArrayList<String> ();
+    	
+        //循环每行binlog
+        for (Entry entry : entrys) {
+        	
             if (entry.getEntryType() == EntryType.TRANSACTIONBEGIN || entry.getEntryType() == EntryType.TRANSACTIONEND) {  
                 continue;  
             }  
@@ -191,10 +244,29 @@ public class CanalClientTest {
                 }
                 
                 String row_data = header_str + row_str + "\"before\":" +before + ",\"after\":" + after + ",\"time\":\"" + timeStr +"\"}\r\n";
+                dataArray.add(row_data);
+                
                 save_data_logs(row_data);
                 //System.out.println(row_data);
             }  
-        }  
+        }
+        
+        // ArrayList<String>  TO String[]
+        String[] strArr = dataArray.toArray(new String[]{});
+        try {
+        	if(canal_mq.equals("rabbitmq")){
+        		push_rabbitmq(strArr);
+        	}else if(canal_mq.equals("redis")){
+        		
+        	}else if(canal_mq.equals("kafka")){
+        		
+        	}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("push rabbitmq error!");
+		}
+        dataArray = null;
     }  
     
     // 获取字段 变更  (1、使用map转换为json。 2、使用urlencode。  避免拼接json错误)
@@ -204,19 +276,10 @@ public class CanalClientTest {
         for (Column column : columns) {
         	String column_name;
         	String column_value;
-        	/**
-        	try {
-				column_name = URLEncoder.encode(column.getName(),"utf-8");
-				column_value = URLEncoder.encode(column.getValue(),"utf-8");
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				//e.printStackTrace();
-				column_name = column.getName();
-				column_value = column.getValue();
-			}**/
         	column_name = column.getName();
 			column_value = column.getValue();
 			
+			/**
 			String a = "";
 			String b = "";
 			String c = "";
@@ -235,19 +298,15 @@ public class CanalClientTest {
 					", a:"+ a+" : " +getEncoding(a) +
 					", b:"+ b+" : " +getEncoding(b) +
 					", c:"+ c+" : " +getEncoding(c));
-			
+			**/
         	column_map.put(column_name, column_value);
-
-        	//column_str = column_str +"\""+ column_name + "\":\"" + column_value + "\",";
             //System.out.println(column.getName() + " : " + column.getValue() + " update=" + column.getUpdated());  
         }
-        //return "{" + column_str.substring(0,column_str.length()-1) + "}"; //去除最后一个字符
-        return JSON.toJSONString(column_map);        
+        return JSON.toJSONString(column_map);
     }
     
-    //save data log
+    //save data file
     private static void save_data_logs(String row_data){
-
     	if (canal_print.equals("true")){
     		System.out.println(row_data);
     	}
@@ -266,10 +325,8 @@ public class CanalClientTest {
         }else{
         	
         }
-        
         SimpleDateFormat df2 = new SimpleDateFormat(ts);
         String timeStr2 = df2.format(new Date());
-        
     	String filename = data_dir + "/binlog_" + timeStr2 + ".log";
     	
     	FileWriter writer;
@@ -282,9 +339,61 @@ public class CanalClientTest {
             e.printStackTrace();
             System.out.println("write file error!");
         }
-    	
     }
     
+    // 将信息push 到 rabbitmq
+    private static void push_rabbitmq(String[] argv) throws java.io.IOException{
+    	ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost(rabbitmq_host);
+        factory.setPort(rabbitmq_port);
+        factory.setUsername(rabbitmq_user);
+        factory.setPassword(rabbitmq_pass);
+        
+        Connection connection = null;
+		try {
+			connection = factory.newConnection();
+		} catch (TimeoutException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			System.out.println("connection rabbitmq error!");
+		}
+        Channel channel = connection.createChannel();
+        channel.queueDeclare(rabbitmq_queuename, true, false, false, null);
+
+        //String message = getMessage(argv);
+        for(int i=0;i<argv.length;i++){
+        	channel.basicPublish( "", rabbitmq_queuename,
+                    MessageProperties.PERSISTENT_TEXT_PLAIN,
+                    argv[i].getBytes());
+        }
+
+        try {
+			channel.close();
+		} catch (TimeoutException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        connection.close();
+    }
+    
+    /**
+    private static String getMessage(String[] strings){
+        if (strings.length < 1)
+            return "";
+        return joinStrings(strings, " ");
+    }
+
+    private static String joinStrings(String[] strings, String delimiter) {
+        int length = strings.length;
+        if (length == 0) return "";
+        StringBuilder words = new StringBuilder(strings[0]);
+        for (int i = 1; i < length; i++) {
+            words.append(delimiter).append(strings[i]);
+        }
+        return words.toString();
+    }**/
+    
+    //check String type
     public static String getEncoding(String str) {
 		String[] array = { "Shift_JIS", "GB2312", "ISO-8859-1", "UTF-8", "GBK", "ASCII", "Big5", "Unicode" };
 		for (int i = 0; i < array.length; i++) {
