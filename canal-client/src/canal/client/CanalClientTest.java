@@ -42,11 +42,10 @@ import java.io.FileWriter;
 //import java.net.URLEncoder;
 
 //rabbitmq(rabbitmq-client.jar)
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.MessageProperties;
-
+//import com.rabbitmq.client.ConnectionFactory;
+//import com.rabbitmq.client.Connection;
+//import com.rabbitmq.client.Channel;
+//import com.rabbitmq.client.MessageProperties;
 
 public class CanalClientTest {
 	
@@ -69,11 +68,13 @@ public class CanalClientTest {
 	
 	//rabbitmq
 	public static String rabbitmq_host = "127.0.0.1";
-	public static int rabbitmq_port = 5672;
+	public static String rabbitmq_port = "5672";
 	public static String rabbitmq_user = "";
 	public static String rabbitmq_pass = "";
 	public static String rabbitmq_queuename = "canal_binlog_data"; //队列名称
-	public static String rabbitmq_ack = "false"; //是否ack
+	public static String rabbitmq_ack = "false"; //ack
+	public static String rabbitmq_durable = "false"; //队列持久
+	public static Map<String,String> rabbitmq_conf;
 	
 	public static void main(String args[]) {
 		String conf_path = path.substring(0, path.lastIndexOf("/")) + "/conf/canal.properties";
@@ -106,7 +107,7 @@ public class CanalClientTest {
         	String conf_rabbitmq_pass = prop.getProperty("rabbitmq.pass").trim();
         	String conf_rabbitmq_queuename = prop.getProperty("rabbitmq.queuename").trim();
         	String conf_rabbitmq_ack = prop.getProperty("rabbitmq.ack").trim();
-        	
+        	String conf_rabbitmq_durable = prop.getProperty("rabbitmq.durable").trim();
         	canal_mq = prop.getProperty("canal.mq").trim();
             
             if ( conf_instance!= null && conf_instance!=""){
@@ -132,7 +133,7 @@ public class CanalClientTest {
             	rabbitmq_host = conf_rabbitmq_host;
             }
             if (conf_rabbitmq_port!= null && conf_rabbitmq_port!=""){
-            	rabbitmq_port = Integer.parseInt(conf_rabbitmq_port);
+            	rabbitmq_port = conf_rabbitmq_port;
             }
             if (conf_rabbitmq_user!= null && conf_rabbitmq_user!=""){
             	rabbitmq_user = conf_rabbitmq_user;
@@ -146,6 +147,18 @@ public class CanalClientTest {
             if (conf_rabbitmq_ack!= null && conf_rabbitmq_ack!=""){
             	rabbitmq_ack = conf_rabbitmq_ack;
             }
+            if (conf_rabbitmq_durable!= null && conf_rabbitmq_durable!=""){
+            	rabbitmq_durable = conf_rabbitmq_durable;
+            }
+            
+            rabbitmq_conf = new HashMap<String, String>();
+            rabbitmq_conf.put("rabbitmq_host", rabbitmq_host);
+            rabbitmq_conf.put("rabbitmq_port", rabbitmq_port);
+            rabbitmq_conf.put("rabbitmq_user", rabbitmq_user);
+            rabbitmq_conf.put("rabbitmq_pass", rabbitmq_pass);
+            rabbitmq_conf.put("rabbitmq_queuename", rabbitmq_queuename);
+            rabbitmq_conf.put("rabbitmq_ack", rabbitmq_ack);
+            rabbitmq_conf.put("rabbitmq_durable", rabbitmq_durable);
             
             System.out.println("#=====host:"+host+":"+port+ "\r\n#=====instance:"+instance+"\r\n");
 
@@ -160,25 +173,22 @@ public class CanalClientTest {
         try {  
             connector.connect();  
             connector.subscribe(".*\\..*");  
-            connector.rollback();  
-            //int totalEmtryCount = 120;  //120s无更新则退出 
+            connector.rollback();
             
             System.out.println("connect success!\r\n startup...");
             
-//          while (emptyCount < totalEmtryCount) {
             while (true){
                 Message message = connector.getWithoutAck(batchSize); // 获取指定数量的数据  
                 long batchId = message.getId();  
                 int size = message.getEntries().size();  
-                if (batchId == -1 || size == 0) {  
-                    //emptyCount++;  
+                if (batchId == -1 || size == 0) {
                     //System.out.println("empty count : " + emptyCount);  
                     try {  
                         Thread.sleep(sleep); // 等待时间
                     } catch (InterruptedException e) {  
+                    	
                     }  
-                } else {  
-                    //emptyCount = 0;  
+                } else {
                     //System.out.printf("message[batchId=%s,size=%s] \n", batchId, size);  
                     printEntry(message.getEntries());  
                 }  
@@ -195,13 +205,12 @@ public class CanalClientTest {
   
     private static void printEntry(List<Entry> entrys) {
     	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String timeStr = df.format(new Date()); // new Date()为获取当前系统时间
+        String timeStr = df.format(new Date());
     	
         ArrayList<String> dataArray = new ArrayList<String> ();
     	
         //循环每行binlog
         for (Entry entry : entrys) {
-        	
             if (entry.getEntryType() == EntryType.TRANSACTIONBEGIN || entry.getEntryType() == EntryType.TRANSACTIONEND) {  
                 continue;  
             }  
@@ -224,7 +233,6 @@ public class CanalClientTest {
             String header_str = "{\"binlog\":\"" + entry.getHeader().getLogfileName()+ ":" + entry.getHeader().getLogfileOffset() + "\"," +
             					"\"db\":\"" + entry.getHeader().getSchemaName() + "\"," +
             					"\"table\":\"" + entry.getHeader().getTableName() + "\",";
-            
             //受影响 数据行
             for (RowData rowData : rowChage.getRowDatasList()) {
             	String row_str = "\"eventType\":\"" + eventType +"\",";
@@ -244,8 +252,7 @@ public class CanalClientTest {
                 }
                 
                 String row_data = header_str + row_str + "\"before\":" +before + ",\"after\":" + after + ",\"time\":\"" + timeStr +"\"}\r\n";
-                dataArray.add(row_data);
-                
+                dataArray.add(row_data);   
                 save_data_logs(row_data);
                 //System.out.println(row_data);
             }  
@@ -255,7 +262,9 @@ public class CanalClientTest {
         String[] strArr = dataArray.toArray(new String[]{});
         try {
         	if(canal_mq.equals("rabbitmq")){
-        		push_rabbitmq(strArr);
+        		rabbitmq r = new rabbitmq();
+        		r.push_rabbitmq(rabbitmq_conf,strArr);
+        		//push_rabbitmq(strArr);
         	}else if(canal_mq.equals("redis")){
         		
         	}else if(canal_mq.equals("kafka")){
@@ -264,7 +273,7 @@ public class CanalClientTest {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("push rabbitmq error!");
+			System.out.println("push "+ canal_mq +" error!");
 		}
         dataArray = null;
     }  
@@ -274,10 +283,8 @@ public class CanalClientTest {
     	//String column_str = "";
     	Map<String, String> column_map = new HashMap<String, String>();
         for (Column column : columns) {
-        	String column_name;
-        	String column_value;
-        	column_name = column.getName();
-			column_value = column.getValue();
+        	String column_name = column.getName();
+        	String column_value = column.getValue();
 			
 			/**
 			String a = "";
@@ -341,13 +348,17 @@ public class CanalClientTest {
         }
     }
     
+    /**
     // 将信息push 到 rabbitmq
     private static void push_rabbitmq(String[] argv) throws java.io.IOException{
     	ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(rabbitmq_host);
-        factory.setPort(rabbitmq_port);
+        factory.setPort(Integer.parseInt(rabbitmq_port));
         factory.setUsername(rabbitmq_user);
         factory.setPassword(rabbitmq_pass);
+        
+        Boolean durable = false;
+        if(rabbitmq_durable.equals("true")) {durable=true;}
         
         Connection connection = null;
 		try {
@@ -358,7 +369,7 @@ public class CanalClientTest {
 			System.out.println("connection rabbitmq error!");
 		}
         Channel channel = connection.createChannel();
-        channel.queueDeclare(rabbitmq_queuename, true, false, false, null);
+        channel.queueDeclare(rabbitmq_queuename, durable, false, false, null);
 
         //String message = getMessage(argv);
         for(int i=0;i<argv.length;i++){
@@ -374,24 +385,8 @@ public class CanalClientTest {
 			e.printStackTrace();
 		}
         connection.close();
-    }
-    
-    /**
-    private static String getMessage(String[] strings){
-        if (strings.length < 1)
-            return "";
-        return joinStrings(strings, " ");
-    }
-
-    private static String joinStrings(String[] strings, String delimiter) {
-        int length = strings.length;
-        if (length == 0) return "";
-        StringBuilder words = new StringBuilder(strings[0]);
-        for (int i = 1; i < length; i++) {
-            words.append(delimiter).append(strings[i]);
-        }
-        return words.toString();
     }**/
+    
     
     //check String type
     public static String getEncoding(String str) {
