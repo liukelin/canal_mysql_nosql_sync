@@ -66,7 +66,7 @@ public class CanalClientTest {
 	//mq
 	public static String canal_mq; // redis/rabbitmq/kafka
 	
-	//rabbitmq
+	// rabbitmq
 	public static String rabbitmq_host = "127.0.0.1";
 	public static String rabbitmq_port = "5672";
 	public static String rabbitmq_user = "";
@@ -75,6 +75,14 @@ public class CanalClientTest {
 	public static String rabbitmq_ack = "false"; //ack
 	public static String rabbitmq_durable = "false"; //队列持久
 	public static Map<String,String> rabbitmq_conf;
+	
+	// redis
+	public static String redis_host = "127.0.0.1";
+	public static String redis_port = "5672";
+	public static String redis_user = "";
+	public static String redis_pass = "";
+	public static String redis_queuename = "canal_binlog_data"; //队列名称
+	public static Map<String,String> redis_conf;
 	
 	public static void main(String args[]) {
 		String conf_path = path.substring(0, path.lastIndexOf("/")) + "/conf/canal.properties";
@@ -91,65 +99,98 @@ public class CanalClientTest {
 //            InputStream in = new FileInputStream("/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/conf/canal.properties");
             
         	prop.load(in);
-            host = prop.getProperty("canal.server.host").trim();   
-            port = Integer.parseInt(prop.getProperty("canal.server.port").trim());
-            String conf_instance = prop.getProperty("canal.server.instance").trim();
+            String conf_host = prop.getProperty("canal.server.host");   
+            String conf_port = prop.getProperty("canal.server.port");
+            String conf_instance = prop.getProperty("canal.server.instance");
             
-            String conf_batchsize = prop.getProperty("canal.batchsize").trim();
-            String conf_sleep = prop.getProperty("canal.sleep").trim();
-            String conf_dir = prop.getProperty("canal.binlog.dir").trim();
-            String conf_filename = prop.getProperty("canal.binlog.filename").trim();
-            String conf_print = prop.getProperty("canal.print").trim();
+            String conf_batchsize = prop.getProperty("canal.batchsize");
+            String conf_sleep = prop.getProperty("canal.sleep");
+            String conf_dir = prop.getProperty("canal.binlog.dir");
+            String conf_filename = prop.getProperty("canal.binlog.filename");
+            String conf_print = prop.getProperty("canal.print");
             
-            String conf_rabbitmq_host = prop.getProperty("rabbitmq.host").trim();
-        	String conf_rabbitmq_port = prop.getProperty("rabbitmq.port").trim();
-        	String conf_rabbitmq_user = prop.getProperty("rabbitmq.user").trim();
-        	String conf_rabbitmq_pass = prop.getProperty("rabbitmq.pass").trim();
-        	String conf_rabbitmq_queuename = prop.getProperty("rabbitmq.queuename").trim();
-        	String conf_rabbitmq_ack = prop.getProperty("rabbitmq.ack").trim();
-        	String conf_rabbitmq_durable = prop.getProperty("rabbitmq.durable").trim();
-        	canal_mq = prop.getProperty("canal.mq").trim();
+            String conf_mq = prop.getProperty("canal.mq");
             
+            String conf_rabbitmq_host = prop.getProperty("rabbitmq.host");
+        	String conf_rabbitmq_port = prop.getProperty("rabbitmq.port");
+        	String conf_rabbitmq_user = prop.getProperty("rabbitmq.user");
+        	String conf_rabbitmq_pass = prop.getProperty("rabbitmq.pass");
+        	String conf_rabbitmq_queuename = prop.getProperty("rabbitmq.queuename");
+        	String conf_rabbitmq_ack = prop.getProperty("rabbitmq.ack");
+        	String conf_rabbitmq_durable = prop.getProperty("rabbitmq.durable");
+        	
+        	String conf_redis_host = prop.getProperty("redis.host");
+        	String conf_redis_port = prop.getProperty("redis.port");
+        	String conf_redis_user = prop.getProperty("redis.user");
+        	String conf_redis_pass = prop.getProperty("redis.pass");
+        	String conf_redis_queuename = prop.getProperty("redis.queuename");
+            
+        	if ( conf_host!= null && conf_host!=""){
+        		host = conf_host.trim();
+            }
+        	if ( conf_port!= null && conf_port!=""){
+        		port = Integer.parseInt(conf_port.trim());
+            }
+
             if ( conf_instance!= null && conf_instance!=""){
-            	instance = conf_instance;
+            	instance = conf_instance.trim();
             }
             if ( conf_batchsize!= null && conf_batchsize!=""){
-            	batchSize = Integer.parseInt(conf_batchsize);
+            	batchSize = Integer.parseInt(conf_batchsize.trim());
             }
             if (conf_sleep!= null && conf_sleep!=""){
-            	sleep = Integer.parseInt(conf_sleep);
+            	sleep = Integer.parseInt(conf_sleep.trim());
             }
             if (conf_dir!= null && conf_dir!=""){
-            	data_dir = conf_dir;
+            	data_dir = conf_dir.trim();
             }
             if (conf_filename!= null && conf_filename!=""){
-            	canal_binlog_filename = conf_filename;
+            	canal_binlog_filename = conf_filename.trim();
             }
             if (conf_print!= null && conf_print!=""){
-            	canal_print = conf_print;
+            	canal_print = conf_print.trim();
+            }
+            if (conf_mq!= null && conf_mq!=""){
+            	canal_mq = conf_mq.trim();
             }
             
             if (conf_rabbitmq_host!= null && conf_rabbitmq_host!=""){
-            	rabbitmq_host = conf_rabbitmq_host;
+            	rabbitmq_host = conf_rabbitmq_host.trim();
             }
             if (conf_rabbitmq_port!= null && conf_rabbitmq_port!=""){
-            	rabbitmq_port = conf_rabbitmq_port;
+            	rabbitmq_port = conf_rabbitmq_port.trim();
             }
             if (conf_rabbitmq_user!= null && conf_rabbitmq_user!=""){
-            	rabbitmq_user = conf_rabbitmq_user;
+            	rabbitmq_user = conf_rabbitmq_user.trim();
             }
             if (conf_rabbitmq_pass!= null && conf_rabbitmq_pass!=""){
-            	rabbitmq_pass = conf_rabbitmq_pass;
+            	rabbitmq_pass = conf_rabbitmq_pass.trim();
             }
             if (conf_rabbitmq_queuename!= null && conf_rabbitmq_queuename!=""){
-            	rabbitmq_queuename = conf_rabbitmq_queuename;
+            	rabbitmq_queuename = conf_rabbitmq_queuename.trim();
             }
             if (conf_rabbitmq_ack!= null && conf_rabbitmq_ack!=""){
-            	rabbitmq_ack = conf_rabbitmq_ack;
+            	rabbitmq_ack = conf_rabbitmq_ack.trim();
             }
             if (conf_rabbitmq_durable!= null && conf_rabbitmq_durable!=""){
-            	rabbitmq_durable = conf_rabbitmq_durable;
+            	rabbitmq_durable = conf_rabbitmq_durable.trim();
             }
+            
+            if (conf_redis_port!= null && conf_redis_port!=""){
+            	redis_host = conf_redis_host.trim();
+	        }
+	        if (conf_redis_port!= null && conf_redis_port!=""){
+	        	redis_port = conf_redis_port.trim();
+	        }
+	        if (conf_redis_user!= null && conf_redis_user!=""){
+	        	redis_user = conf_redis_user.trim();
+	        }
+	        if (conf_redis_pass!= null && conf_redis_pass!=""){
+	        	redis_pass = conf_redis_pass.trim();
+	        }
+	        if (conf_redis_queuename!= null && conf_redis_queuename!=""){
+	        	redis_queuename = conf_redis_queuename.trim();
+	        }
             
             rabbitmq_conf = new HashMap<String, String>();
             rabbitmq_conf.put("rabbitmq_host", rabbitmq_host);
@@ -159,6 +200,14 @@ public class CanalClientTest {
             rabbitmq_conf.put("rabbitmq_queuename", rabbitmq_queuename);
             rabbitmq_conf.put("rabbitmq_ack", rabbitmq_ack);
             rabbitmq_conf.put("rabbitmq_durable", rabbitmq_durable);
+            
+            redis_conf = new HashMap<String, String>();
+            redis_conf.put("host", redis_host);
+            redis_conf.put("port", redis_port);
+            redis_conf.put("user", redis_user);
+            redis_conf.put("pass", redis_pass);
+            redis_conf.put("queuename", redis_queuename);
+       
             
             System.out.println("#=====host:"+host+":"+port+ "\r\n#=====instance:"+instance+"\r\n");
 
@@ -266,7 +315,8 @@ public class CanalClientTest {
         		r.push_rabbitmq(rabbitmq_conf,strArr);
         		//push_rabbitmq(strArr);
         	}else if(canal_mq.equals("redis")){
-        		
+        		redis r = new redis();
+        		r.push_redis(redis_conf, strArr);
         	}else if(canal_mq.equals("kafka")){
         		
         	}
@@ -408,4 +458,12 @@ public class CanalClientTest {
 	}
     
     
+    
 }
+
+
+/**
+ * 多线程包concurrent ， Executor 多线程操作
+ */
+
+
