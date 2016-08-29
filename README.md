@@ -111,7 +111,7 @@ canal client 配置启动：
 	
 	canal client将从canal server获取的binlog数据最终以json行格式保存到指定文件(也可省略这步，直接发送到MQ)。
 	
-	1.下载解压项目，这里自己写了个基于1.0.22版本的项目:canal_client1.0.22.zip(https://github.com/liukelin/canal_mysql_nosql_sync/files/426769/canal_client1.0.22.zip), 源码查看：canal-client
+	1.下载解压项目，这里自己写了个基于1.0.22版本的项目:canal_client1.0.22.zip(https://github.com/liukelin/canal_mysql_nosql_sync/releases ), 源码查看：canal-client
 		
 	2.基本配置
 		
