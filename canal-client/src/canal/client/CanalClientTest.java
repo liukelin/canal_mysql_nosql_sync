@@ -300,7 +300,7 @@ public class CanalClientTest {
                     after = printColumn(rowData.getAfterColumnsList());  
                 }
                 
-                String row_data = header_str + row_str + "\"before\":" +before + ",\"after\":" + after + ",\"time\":\"" + timeStr +"\"}\r\n";
+                String row_data = header_str + row_str + "\"before\":" +before + ",\"after\":" + after + ",\"time\":\"" + timeStr +"\"}";
                 dataArray.add(row_data);   
                 save_data_logs(row_data);
                 //System.out.println(row_data);
@@ -389,7 +389,7 @@ public class CanalClientTest {
     	FileWriter writer;
         try {
             writer = new FileWriter(filename, true);
-            writer.write(row_data);
+            writer.write(row_data + "\r\n");
             writer.flush();
             writer.close();
         } catch (IOException e) {
