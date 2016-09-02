@@ -75,7 +75,8 @@ canal server 配置启动：
 	
 	canal server 模拟mysql从库并向mysql发送dump命令获取mysql binlog数据。
 	
-	1.下载解压项目，这里提供了1.0.22版本:canal.deployer-1.0.22.tar.gz(https://github.com/liukelin/canal_mysql_nosql_sync/files/426724/canal.deployer-1.0.22.tar.gz) 可从下载最新版本：https://github.com/alibaba/canal/releases
+	1.下载解压项目，这里提供了1.0.22版本:canal.deployer-1.0.22.tar.gz(https://github.com/liukelin/canal_mysql_nosql_sync/files/426724/canal.deployer-1.0.22.tar.gz) 
+	可从阿里项目下载最新版本 deployer ：https://github.com/alibaba/canal/releases
 	
 	2.配置项目：
 		# 公共配置
@@ -184,3 +185,7 @@ canal client 配置启动：
 
 
 <h1>资源下载</h1>
+
+ canal server 服务端deployer： https://github.com/alibaba/canal/releases/tag/canal-1.0.22
+ 
+ canal client 客户端： https://github.com/liukelin/canal_mysql_nosql_sync/releases/tag/1.0.22.2
