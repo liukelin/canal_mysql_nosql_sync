@@ -1,4 +1,4 @@
-Canal MySql RabbitMQ Redis/memcached/mongodb 的nosql同步 （多读、nosql延时不严格 需求）
+基于 Canal MySql RabbitMQ Redis/memcached/mongodb 的nosql同步 （多读、nosql延时不严格 需求）
 
 	1.mysql主从配置
 
@@ -20,7 +20,7 @@ Canal MySql RabbitMQ Redis/memcached/mongodb 的nosql同步 （多读、nosql延
 
 
 
-Mysql Redis/memcached nosql的缓存 （多读写需求）
+传统 Mysql Redis/memcached nosql的缓存 （多读写需求）
 
 	1.对数据在mysql的hash算法分布(db/table/分区)，每个hash为节点（nosql数据全部失效时候，可保证mysql各节点可支持直接读取的性能）
 
@@ -34,7 +34,7 @@ Mysql Redis/memcached nosql的缓存 （多读写需求）
 
 	6.
 
-	请求：http->webserver->【业务寻址hash节点】->1.redis(有数据)-> 返回数据
+	请求：http->webserver->【对key计算一致性hash节点】->connect对应的redis实例->1.redis(有数据)-> 返回数据
 
 										    ->2.redis(无数据)-> mysql (并写入数据redis) -> 返回数据
 
