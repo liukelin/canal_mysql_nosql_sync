@@ -176,11 +176,12 @@ canal client 配置启动：
 	
 	这样的话，如果使用rabbitMQ 就必须给每个 client 提供独立的队列。并独立消费
 	1、使用kafka，利用他的分组group,每个client 为一个组，这样就可保证，数据给每个组一致。
-	2、对每个项目需求开独立的实例进程
+	2、对每个项目需求开独立的 canal server instance 和 canal client实例
 	
 
-
-		
+	配置：
+	 
+    
 .....end 后续。。。
 
 
@@ -189,3 +190,5 @@ canal client 配置启动：
  canal server 服务端deployer： https://github.com/alibaba/canal/releases/tag/canal-1.0.22
  
  canal client 客户端： https://github.com/liukelin/canal_mysql_nosql_sync/releases/tag/1.0.22.2
+ 
+ 数据消费写入nosql: 
