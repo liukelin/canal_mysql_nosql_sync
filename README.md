@@ -1,4 +1,4 @@
-Canal MySql RabbitMQ Redis/memcached/mongodb 的nosql同步 （多读、nosql延时不严格 需求）
+基于 Canal MySql RabbitMQ Redis/memcached/mongodb 的nosql同步 （多读、nosql延时不严格 需求）
 
 	1.mysql主从配置
 
@@ -20,7 +20,7 @@ Canal MySql RabbitMQ Redis/memcached/mongodb 的nosql同步 （多读、nosql延
 
 
 
-Mysql Redis/memcached nosql的缓存 （多读写需求）
+传统 Mysql Redis/memcached nosql的缓存 （多读写需求）
 
 	1.对数据在mysql的hash算法分布(db/table/分区)，每个hash为节点（nosql数据全部失效时候，可保证mysql各节点可支持直接读取的性能）
 
@@ -34,7 +34,7 @@ Mysql Redis/memcached nosql的缓存 （多读写需求）
 
 	6.
 
-	请求：http->webserver->【业务寻址hash节点】->1.redis(有数据)-> 返回数据
+	请求：http->webserver->【对key计算一致性hash节点】->connect对应的redis实例->1.redis(有数据)-> 返回数据
 
 										    ->2.redis(无数据)-> mysql (并写入数据redis) -> 返回数据
 
@@ -176,11 +176,12 @@ canal client 配置启动：
 	
 	这样的话，如果使用rabbitMQ 就必须给每个 client 提供独立的队列。并独立消费
 	1、使用kafka，利用他的分组group,每个client 为一个组，这样就可保证，数据给每个组一致。
-	2、对每个项目需求开独立的实例进程
+	2、对每个项目需求开独立的 canal server instance 和 canal client实例
 	
 
-
-		
+	配置：
+	 
+    
 .....end 后续。。。
 
 
@@ -189,3 +190,5 @@ canal client 配置启动：
  canal server 服务端deployer： https://github.com/alibaba/canal/releases/tag/canal-1.0.22
  
  canal client 客户端： https://github.com/liukelin/canal_mysql_nosql_sync/releases/tag/1.0.22.2
+ 
+ 数据消费写入nosql: 
