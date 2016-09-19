@@ -1,4 +1,6 @@
-基于 Canal MySql RabbitMQ Redis/memcached/mongodb 的nosql同步 （多读、nosql延时不严格 需求）
+![image](https://github.com/liukelin/canal_mysql_nosql_sync/raw/master/img/system-image.png)
+
+基于 Canal 的 MySql RabbitMQ Redis/memcached/mongodb 的nosql同步 （多读、nosql延时不严格 需求）
 
 	1.mysql主从配置
 
@@ -20,7 +22,8 @@
 
 
 
-传统 Mysql Redis/memcached nosql的缓存 （多读写需求）
+传统 Mysql Redis/memcached nosql的缓存 （业务同步）
+        从cache读取数据->
 
 	1.对数据在mysql的hash算法分布(db/table/分区)，每个hash为节点（nosql数据全部失效时候，可保证mysql各节点可支持直接读取的性能）
 
@@ -32,20 +35,21 @@
 
 	5.恢复节点数据
 
-	6.
+	6.请求：http->webserver->【对key计算一致性hash节点】->connect对应的redis实例
+	                                                    
+	                                                    ->1.redis(有数据)-> 返回数据
 
-	请求：http->webserver->【对key计算一致性hash节点】->connect对应的redis实例->1.redis(有数据)-> 返回数据
+				                            ->2.redis(无数据)-> mysql (并写入数据redis) -> 返回数据
 
-										    ->2.redis(无数据)-> mysql (并写入数据redis) -> 返回数据
+		                                            ->3.redis节点挂掉-> 业务寻址hash替代节点 
+		                                                                      -> 3.1 redis(有数据) -> 返回数据
 
-										    ->3.redis节点挂掉-> 业务寻址hash替代节点 -> redis(有数据) -> 返回数据
-
-										                                          -> redis(无数据) -> mysql (
-
-										                                          并写入数据redis) -> 返回数据
+										      -> 3.2 redis(无数据) -> mysql(并写入数据redis) -> 返回数据
 
 
-部署(详情查看wiki):
+ ![image](https://github.com/liukelin/canal_mysql_nosql_sync/raw/master/img/canal-mysql-nosql.png)
+
+部署:
 
 	阿里canal纯java开发，所以要先安装java环境
 
