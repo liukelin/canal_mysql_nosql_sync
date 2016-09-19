@@ -45,7 +45,9 @@
 										                                          并写入数据redis) -> 返回数据
 
 
-部署(详情查看wiki):
+[流程图](https://github.com/liukelin/canal_mysql_nosql_sync/blob/master/img/canal-mysql-nosql.png)
+
+部署:
 
 	阿里canal纯java开发，所以要先安装java环境
 
