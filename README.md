@@ -1,3 +1,5 @@
+![image](https://github.com/liukelin/canal_mysql_nosql_sync/raw/master/img/system-image.png)
+
 基于 Canal 的 MySql RabbitMQ Redis/memcached/mongodb 的nosql同步 （多读、nosql延时不严格 需求）
 
 	1.mysql主从配置
