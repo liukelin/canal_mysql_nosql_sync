@@ -45,7 +45,7 @@
 										                                          并写入数据redis) -> 返回数据
 
 
-[流程图](https://github.com/liukelin/canal_mysql_nosql_sync/blob/master/img/canal-mysql-nosql.png)
+[流程图](https://github.com/liukelin/canal_mysql_nosql_sync/raw/master/img/canal-mysql-nosql.png)
 
 部署:
 
