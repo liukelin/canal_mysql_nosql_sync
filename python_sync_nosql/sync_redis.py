@@ -19,7 +19,9 @@ def conn_redis():
 	redisConn = redis.Redis(ConnectionPool=pool)
 	print(redisConn, redisConn.ping())
 
-
+'''
+ 获取rabbitmq队列数据
+'''
 def get_mq():
 	
 	credentials = pika.PlainCredentials(config.rabbitmq_user, config.rabbitmq_pass) # 远程访问禁止使用 guest账号
@@ -49,7 +51,27 @@ def get_mq():
 
 	channel.start_consuming()
 
+
+'''
+ 写入到redis
+'''
 def sync_redis(body):
+	
+	data = json.loads(body)
+	if isinstance(data, (dict)) == False:
+		return False
+
+	if data.has_key('eventType'):
+		if data['eventType'] == 'UPDATE':
+
+		elif data['eventType'] == 'INSERT':
+
+		elif data['eventType'] == 'DELETE':
+
+		else:
+			pass
+
+	else:
 
 
 
@@ -62,7 +84,15 @@ def sync_redis(body):
 	except:
 		conn_redis()
 
+'''
+{"binlog":"mysql-bin.000027:258",
+"db":"duobao",
+"table":"category",
+"eventType":"UPDATE",
+"before":{"icon":"http://duobao.qianlu.com/static/icon/0008.png","id":"4","name":"????","order":"3","path":"/","status":"0"},
+"after":{"icon":"http://duobao.qianlu.com/static/icon/0008.png","id":"4","name":"????","order":"4","path":"/","status":"0"},"time":"2016-09-09 10:43:48"}
 
+'''
 
 
 

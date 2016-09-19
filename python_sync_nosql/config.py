@@ -16,6 +16,5 @@ rabbitmq_queue_name = 'binlog_test'
 
 
 # redis
-rabbitmq_host = '127.0.0.1'
-rabbitmq_port = 6379
-
+redis_host = '127.0.0.1'
+redis_port = 6379
