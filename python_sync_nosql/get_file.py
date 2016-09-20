@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #  rabitmq client 生产队列数据
-#  将file 数据添加到 mq 
-
+#  读取 file 数据 到 mq 
+get_file
 # @author: liukelin  314566990@qq.com
 
 import pika
@@ -86,29 +86,6 @@ def log_tag(action, data=''):
 		return con
 	return False
 
-
-# push MQ
-def conn_mq():
-	
-	queue_name = config.rabbitmq_queue_name if config.rabbitmq_queue_name !='' else 'binlog_test'
-
-	credentials = pika.PlainCredentials(config.rabbitmq_user, config.rabbitmq_pass) # 远程访问禁止使用 guest账号
-	# 这里可以连接远程IP，请记得打开远程端口
-	parameters = pika.ConnectionParameters(config.rabbitmq_host, config.rabbitmq_port,'/',credentials) 
-	# 建立连接
-	connection = pika.BlockingConnection(parameters) # 本机 parameters可直接写localhost
-	
-	# channel
-	channel = connection.channel()  
-
-	# 是确保队列存在 / 创建queue
-	channel.queue_declare(queue=queue_name)
-
-	# 发送消息到指定队列
-	# channel.basic_publish(exchange='',routing_key=queue_name,body='test')
-
-	# connection.close()
-	return connection, channel, queue_name
 
 
 if __name__ == "__main__":
