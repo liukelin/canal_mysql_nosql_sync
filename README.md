@@ -198,6 +198,7 @@ canal client 配置启动：
 	   语言：python3
 	   pip：pika redis
 	   
+	   项目代码： python_sync_nosql
 	   修改配置文件config.py
 	   	# 最终存储数据redis
 		redis_host = '127.0.0.1'
@@ -232,4 +233,4 @@ canal client 配置启动：
  
  canal client 客户端： https://github.com/liukelin/canal_mysql_nosql_sync/releases/tag/1.0.22.2
  
- 数据消费写入nosql: 
+ 数据消费写入nosql例子: python_sync_nosql 这里是消费rabbitmq数据最终同步到redis
