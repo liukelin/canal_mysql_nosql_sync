@@ -12,5 +12,6 @@ import config
 import pika
 import get_rabbitmq
 
-
+print(' ====liukelin==== ')
+print(' [*] Waiting for messages. To exit press CTRL+C')
 get_rabbitmq.get_mq()

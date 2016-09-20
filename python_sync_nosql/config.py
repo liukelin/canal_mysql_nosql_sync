@@ -22,11 +22,11 @@ rabbitmq_queue_name = 'binlog_test'
 
 # 指定保存到redis的key，指定每个db-table的 key
 redis_cache_map = {
-        # db
-		'db1':{  
-		        # table      
-				'test':'id',  # 
-			  }
-	}
+    # db
+	'test':{  
+	        # table      
+			'users':'uid',  # 
+		  }
+}
 
 
