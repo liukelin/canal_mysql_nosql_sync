@@ -210,13 +210,20 @@ canal client 配置启动：
 		rabbitmq_pass = '123456'
 		
 		# 设置对每个table存储使用的key字段
-		
+		redis_cache_map = {
+    			# db
+			'test':{
+	        		# table      
+				'users':'uid',  # 
+		  	}
+		}
 	 
 	 运行脚本：
 	 	$ python3 startup.py
 	 
-	 数据最终存储为Redis 的 hash结构，key为 db_table_id
-	 
+
+数据最终存储为Redis 的 hash结构，key为 db_table_id
+![image](https://github.com/liukelin/canal_mysql_nosql_sync/raw/master/img/redis-hash.png)
 	 
 
 <h1>资源下载</h1>
