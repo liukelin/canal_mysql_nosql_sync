@@ -216,7 +216,7 @@ canal client 配置启动：
 	 	$ python3 startup.py
 	 
 	 数据最终存储为Redis 的 hash结构，key为 db_table_id
-	 ![image](https://github.com/liukelin/canal_mysql_nosql_sync/raw/master/img/redis-hash.png)
+![image](https://github.com/liukelin/canal_mysql_nosql_sync/raw/master/img/redis-hash.png)
 	 
 
 <h1>资源下载</h1>
