@@ -68,7 +68,7 @@ mysql配置：
 	保存并退出，并重启mysql
 		$ sudo service mysql restart
 	
-	2.创建 mysql账号密码（账号密码自定）
+	2.创建 mysql账号密码（账号密码自定 权限自定）
 	
 		CREATE USER canal IDENTIFIED BY 'canal';    
 		GRANT SELECT, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'canal'@'%';  
@@ -108,9 +108,9 @@ canal server 配置启动：
 	3.启动：
 		$ sh bin/startup.sh
 		
-	日志文件：$ less logs/canal/canal.log	   # canal server端运行日志
-		  $ less logs/example/example.log  # canal client端连接日志
-		  $ logs/example/meta.log 	   # 实例binlog 读取记录文件
+	日志文件：$ less logs/canal/canal.log	    # canal server端运行日志
+		  $ less logs/example/example.log   # canal client端连接日志
+		  $ logs/example/meta.log 	    # 实例binlog 读取记录文件（记录变更位置，默认为新增变更(tail)）
 
 canal client 配置启动：
 	
@@ -122,41 +122,52 @@ canal client 配置启动：
 		
 		$vim conf/canal.properties
 		
-		# cancal server host， canal server的连接IP
+		# cancal server host， 上面 canal server的IP
 		canal.server.host = 127.0.0.1
 		
-		# cancal server port，canal server的连接端口 
+		# cancal server port，上面 canal server的启动端口 
 		canal.server.port = 11111
-		
-		# 实例 默认 example
-		canal.server.instance = example
-		
-		# 每次获取binlog数据 行数
-		canal.batchsize = 1000
-		
-		# 每次获取等待时间单位/ms
-		canal.sleep = 1000
 		
 		# 数据保存路径 ，自行指定
 		canal.binlog.dir = db_data
 		
+		# 可选rabbitmq/redis/kafka 作为队列（这里使用 rabbitmq 作为队列传输）
+		canal.mq = rabbitmq 
+
+		###### rabbitmq 基本配置 #####
+		rabbitmq.host = 127.0.0.1
+		rabbitmq.port = 5672
+		rabbitmq.user = test
+		rabbitmq.pass = 123456
+
+		
 		保存退出。
 	
-	3.启动：
+	3.启动canal client：
 	
 		$ sh start_canal_client.sh
 		
 
+修改mysql数据触发。
+
 最终结果：
+	eventType ：操作类型（UPDATE/INSERTDELETE）
+	db：   涉及库
+	table: 涉及表
+	before:变更前数据
+	after: 变更后数据
+	time:  操作时间
+	
+
         $less db_data/binlog_xxxx.log
  
-        {"binlog":"mysql-bin.000009:1235","db":"duobao","table":"users","eventType":"UPDATE","before":{"email":"","password":"123456","phone":"","tid":"153713294","uid":"8","username":"duobao153713223"},"after":{"email":"","password":"123456","phone":"137633822321","tid":"153713294","uid":"8","username":"duobao153713223"},"time":"2016-08-22 17:47:25"}
+        {"binlog":"mysql-bin.000009:1235","db":"test","table":"users","eventType":"UPDATE","before":{"uid":"8","username":"duobao153713223"},"after":{"uid":"8","username":"duobao153713223"},"time":"2016-08-22 17:47:25"}
 
-        {"binlog":"mysql-bin.000009:1533","db":"duobao","table":"users","eventType":"DELETE","before":"","after":{"email":"","password":"123456","phone":"137633822321","tid":"153713294","uid":"8","username":"duobao153713223"},"time":"2016-08-22 17:48:09"}
+        {"binlog":"mysql-bin.000009:1533","db":"test","table":"users","eventType":"DELETE","before":"","after":{"uid":"8","username":"duobao153713223"},"time":"2016-08-22 17:48:09"}
 
-        {"binlog":"mysql-bin.000009:1790","db":"duobao","table":"users","eventType":"INSERT","before":"","after":{"email":"","password":"","phone":"","tid":"1536328122","uid":"9","username":"test2"},"time":"2016-08-22 17:48:45"}
+        {"binlog":"mysql-bin.000009:1790","db":"test","table":"users","eventType":"INSERT","before":"","after":{"uid":"9","username":"test2"},"time":"2016-08-22 17:48:45"}
 
-消费数据：（这里使用python/rabbitmq/redis 作为案例，实际可根据业务需求）
+消费数据：（这里使用python3/rabbitmq/redis 作为案例，实际可根据业务需求）
         
         流程 ：file数据-> MQ -> nosql
         
@@ -164,7 +175,7 @@ canal client 配置启动：
 
 	语言：python3
 	
-	nosql: redis
+	NoSql: redis
 	
 	
 	多项目订阅需求，如：client1和client2 需要消费这些数据， 他们得到的数据一样
@@ -184,10 +195,29 @@ canal client 配置启动：
 	
 
 	配置：
+	   语言：python3
+	   pip：pika redis
+	   
+	   修改配置文件config.py
+	   	# 最终存储数据redis
+		redis_host = '127.0.0.1'
+		redis_port = 6379
+		
+		###### rabbitmq 基本配置 #####
+		rabbitmq_host = '127.0.0.1'
+		rabbitmq_port = 5672
+		rabbitmq_user = 'test'    
+		rabbitmq_pass = '123456'
+		
+		# 设置对每个table存储使用的key字段
+		
 	 
-    
-.....end 后续。。。
-
+	 运行脚本：
+	 	$ python3 startup.py
+	 
+	 数据最终存储为Redis 的 hash结构，key为 db_table_id
+	 
+	 
 
 <h1>资源下载</h1>
 
