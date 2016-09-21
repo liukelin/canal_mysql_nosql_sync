@@ -169,10 +169,10 @@ canal client 配置启动：
 
 消费数据：（这里使用python3/rabbitmq/redis 作为案例，实际可根据业务需求）
         
-        流程 ：file数据-> MQ -> nosql
-        
-        MQ: rabbitMQ
-
+	流程 ：file数据-> MQ -> nosql
+	
+	MQ: rabbitMQ
+	
 	语言：python3
 	
 	NoSql: redis
