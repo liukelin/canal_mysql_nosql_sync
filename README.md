@@ -212,10 +212,10 @@ canal client 配置启动：
 		
 		# 设置对每个table存储使用的key字段
 		redis_cache_map = {
-    			# db
+			# db
 			'test':{
-	        		# table      
-				'users':'uid',  # 
+				# table ： kid
+				'users':'uid', 
 		  	}
 		}
 	 
