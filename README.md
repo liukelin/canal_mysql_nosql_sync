@@ -54,12 +54,14 @@
  ![image](https://github.com/liukelin/canal_mysql_nosql_sync/raw/master/img/canal-mysql-nosql.png)
  
  
- 为什么要使用消息队列（rabbitmq/kaf）进行binlog传输:
- 	
-
- 
-
- 部署:
+为什么要使用消息队列（MQ）进行binlog传输:
+	
+	1.增加缓冲，binlog生产端（canal client）只负责生产而不需要考虑消费端的消费能力, 不等待阻塞。
+	
+	2.binlog 消费端: 可实时根据MQ消息的堆积情况，动态 增加/减少 消费端的数量，达到合理的资源利用和消费	
+	
+	
+部署:
 
 	阿里canal纯java开发，所以要先安装java环境
 
