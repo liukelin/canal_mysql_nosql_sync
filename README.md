@@ -52,8 +52,14 @@
 
 
  ![image](https://github.com/liukelin/canal_mysql_nosql_sync/raw/master/img/canal-mysql-nosql.png)
+ 
+ 
+ 为什么要使用消息队列（rabbitmq/kaf）进行binlog传输:
+ 	
 
-部署:
+ 
+
+ 部署:
 
 	阿里canal纯java开发，所以要先安装java环境
 
@@ -79,7 +85,7 @@ mysql配置：
 		-- GRANT ALL PRIVILEGES ON *.* TO 'canal'@'%' ;  
 		FLUSH PRIVILEGES;
 
-canal server 配置启动：
+ canal server 配置启动：
 	
 	canal server 模拟mysql从库并向mysql发送dump命令获取mysql binlog数据。
 	
@@ -116,7 +122,7 @@ canal server 配置启动：
 		  $ less logs/example/example.log   # canal client端连接日志
 		  $ logs/example/meta.log 	    # 实例binlog 读取记录文件（记录变更位置，默认为新增变更(tail)）
 
-canal client 配置启动：
+ canal client 配置启动：
 	
 	canal client将从canal server获取的binlog数据最终以json行格式保存到指定文件(也可省略这步，直接发送到MQ)。
 	
