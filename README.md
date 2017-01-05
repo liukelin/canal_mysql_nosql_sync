@@ -1,3 +1,7 @@
+
+
+
+下图是最基本的web服务器的结构图。
 ![image](https://github.com/liukelin/canal_mysql_nosql_sync/raw/master/img/system-image.png)
 
 基于 Canal 的 MySql RabbitMQ Redis/memcached/mongodb 的nosql同步 （多读、nosql延时不严格 需求）
@@ -48,7 +52,15 @@
 
 
  ![image](https://github.com/liukelin/canal_mysql_nosql_sync/raw/master/img/canal-mysql-nosql.png)
-
+ 
+ 
+为什么要使用消息队列（MQ）进行binlog传输:
+	
+	1.增加缓冲，binlog生产端（canal client）只负责生产而不需要考虑消费端的消费能力, 不等待阻塞。
+	
+	2.binlog 消费端: 可实时根据MQ消息的堆积情况，动态 增加/减少 消费端的数量，达到合理的资源利用和消费	
+	
+	
 部署:
 
 	阿里canal纯java开发，所以要先安装java环境
@@ -75,7 +87,7 @@ mysql配置：
 		-- GRANT ALL PRIVILEGES ON *.* TO 'canal'@'%' ;  
 		FLUSH PRIVILEGES;
 
-canal server 配置启动：
+ canal server 配置启动：
 	
 	canal server 模拟mysql从库并向mysql发送dump命令获取mysql binlog数据。
 	
@@ -112,7 +124,7 @@ canal server 配置启动：
 		  $ less logs/example/example.log   # canal client端连接日志
 		  $ logs/example/meta.log 	    # 实例binlog 读取记录文件（记录变更位置，默认为新增变更(tail)）
 
-canal client 配置启动：
+ canal client 配置启动：
 	
 	canal client将从canal server获取的binlog数据最终以json行格式保存到指定文件(也可省略这步，直接发送到MQ)。
 	
@@ -169,10 +181,10 @@ canal client 配置启动：
 
 消费数据：（这里使用python3/rabbitmq/redis 作为案例，实际可根据业务需求）
         
-        流程 ：file数据-> MQ -> nosql
-        
-        MQ: rabbitMQ
-
+	流程 ：file数据-> MQ -> nosql
+	
+	MQ: rabbitMQ
+	
 	语言：python3
 	
 	NoSql: redis
@@ -212,10 +224,10 @@ canal client 配置启动：
 		
 		# 设置对每个table存储使用的key字段
 		redis_cache_map = {
-    			# db
+			# db
 			'test':{
-	        		# table      
-				'users':'uid',  # 
+				# table ： kid
+				'users':'uid', 
 		  	}
 		}
 	 
