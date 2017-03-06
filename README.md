@@ -165,11 +165,17 @@ mysql配置：
 修改mysql数据触发。
 
 最终结果：
+		
 	eventType ：操作类型（UPDATE/INSERTDELETE）
+	
 	db：   涉及库
+	
 	table: 涉及表
+	
 	before:变更前数据
+	
 	after: 变更后数据
+	
 	time:  操作时间
 	
 
