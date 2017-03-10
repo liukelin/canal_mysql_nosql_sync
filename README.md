@@ -247,7 +247,8 @@ mysql配置：
 ![image](https://github.com/liukelin/canal_mysql_nosql_sync/raw/master/img/redis-hash.png)
 	 
 
-总结：
+	总结：
+	
 	1.使用MQ作为传输，可提高容错度，并且可以起到一个消费速度的缓冲，在程序上加上对队列积压数据的监控，可实时增加或减少MQ消费进程的数量。
 	
 	2.为了提高binlog数据的可靠消费，建议使用带有ACK功能的MQ 做为消息队列使用
