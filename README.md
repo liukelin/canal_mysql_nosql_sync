@@ -260,8 +260,12 @@ mysql配置：
 
 <h1>资源下载</h1>
 
- canal server 服务端deployer： https://github.com/alibaba/canal/releases/tag/canal-1.0.22
+ canal server 服务端deployer： [https://github.com/alibaba/canal/releases/tag/canal-1.0.22](https://github.com/alibaba/canal/releases/tag/canal-1.0.22)
+
  
- canal client 客户端： https://github.com/liukelin/canal_mysql_nosql_sync/releases/tag/1.0.22.2
+ canal client 客户端： [https://github.com/liukelin/canal_mysql_nosql_sync/releases/tag/1.0.22.2](https://github.com/liukelin/canal_mysql_nosql_sync/releases/tag/1.0.22.2)
  
  数据消费写入nosql例子: python_sync_nosql 这里是消费rabbitmq数据最终同步到redis
+
+
+
