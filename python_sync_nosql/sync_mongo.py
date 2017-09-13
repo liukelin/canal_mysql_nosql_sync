@@ -101,6 +101,7 @@ def set_data(body):
 
     return False
 
+'''
 body={
         "binlog": "mysql-bin.000009:1235",
         "db": "test",
@@ -118,6 +119,7 @@ body={
     }
 body = json.dumps(body)
 set_data(body)
+'''
 
 
 
