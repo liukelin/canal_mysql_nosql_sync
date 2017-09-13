@@ -11,7 +11,7 @@ import os
 import config
 import pika
 
-if config.get('sync_db')=='mongo':
+if config.sync_db=='mongo':
 	import sync_mongo as sync_data
 else:
 	import sync_redis as sync_data
