@@ -245,7 +245,37 @@ mysql配置：
 
 数据最终存储为Redis 的 hash结构，key为 db_table_id
 ![image](https://github.com/liukelin/canal_mysql_nosql_sync/raw/master/img/redis-hash.png)
-	 
+
+同步到MongoDB同理
+	
+	  这里的demo是将表数据映射到 mongodb 结构
+	  db    => db
+	  table => 集合
+	  column=> coll
+![image](https://github.com/liukelin/canal_mysql_nosql_sync/raw/master/img/mongo.png)
+
+
+    
+## 目录结构
+
+~~~
+
+├─canal-client/         封装的canal client客户端 和 消息队列MQ 项目
+│  ├─src/           	项目代码
+│  ├─lib/           	jar包依赖
+│  ├─conf/            	配置文件
+│  ├─canal_client.jar   启动jar
+│  └─start_canal_client.sh     启动文件
+│  
+├─python_sync_nosql/        消费MQ binlog数据, 将数据写入到NoSql demo
+│  ├─queue_rabbitmq.py 		rabbitmq 消费端
+│  ├─sync_redis.py 			写入到redis
+│  ├─sync_mongo.py 			写入到mongo
+│  ├─config.py 				配置
+│  └─startup.py         	启动入口
+└─
+
+~~~
 
 	总结：
 	
