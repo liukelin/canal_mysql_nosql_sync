@@ -16,11 +16,15 @@ from pymongo import MongoClient
 client=False
 def Conn():
     client = MongoClient(config.mongo_host, config.mongo_port)
-    print(redisConn, redisConn.ping())
+    print(client)
 
 '''
  ·将数据写入到 mongo
-  这里的demo是将表数据映射到 redis hash 结构，key=db:table:primary_id
+  这里的demo是将表数据映射到 mongodb 结构
+  db    => db
+  table => 集合
+  column=> coll
+
   body={
         "binlog": "mysql-bin.000009:1235",
         "db": "test",
@@ -45,27 +49,31 @@ def set_data(body):
     if isinstance(data, (dict)) == False:
         return False
 
-    if data.has_key('eventType') and data.has_key('after') and data.has_key('db') and data.has_key('table'):
+    if 'eventType' in data and 'after' in data and 'db' in data and 'table' in data:
         
         if not client:
             Conn()
 
+        mongo_cache_map = config.mongo_cache_map
+        db = data.get('db')
+        table = data.get('table')
+
         # 指定数据库(db)
-        db = client.(data.get('db'))
+        dbc = client.db
 
         # 指定集合(表)
-        posts = db.(data.get('table'))
+        posts = dbc.table
 
         if not posts:
             return False
 
-        if data.get('eventType') in ['UPDATE', 'INSERT', 'DELETE'] and isinstance(data['after'], (dict)):
+        if data.get('eventType') in ['UPDATE', 'INSERT', 'DELETE'] and isinstance(data.get('after'), (dict)):
             
-            coll = '';
-            pid = 0;
+            coll = '';  # 唯一字段名
+            pid = 0;    # 值
             # 获取更新条件唯一值
-            if mongo_cache_map.get(data.get('db')) and mongo_cache_map.get(data.get('db')).get(data.get('table')):
-                coll = mongo_cache_map.get(data.get('db')).get(data.get('table'))
+            if mongo_cache_map.get(db) and mongo_cache_map.get(db).get(table):
+                coll = mongo_cache_map.get(db).get(table)
                 pid = data.get(coll)
 
             else:
@@ -73,14 +81,14 @@ def set_data(body):
 
             if data.get('eventType')=='INSERT':
 
-                posts.insert(data['after'])
+                posts.insert( data.get('after') )
                 # posts.save(data.get('table'))
 
-            else if data.get('eventType')=='UPDATE':
+            elif data.get('eventType')=='UPDATE':
 
-                collection.update( { coll:pid } , {'$set': data['after'] })
+                collection.update( { coll:pid } , {'$set': data.get('after') } )
 
-            else if data.get('eventType')=='DELETE':
+            elif data.get('eventType')=='DELETE':
 
                 posts.remove( { coll:pid } )
 
@@ -93,7 +101,23 @@ def set_data(body):
 
     return False
 
-
+body={
+        "binlog": "mysql-bin.000009:1235",
+        "db": "test",
+        "table": "users",
+        "eventType": "UPDATE",
+        "before": {
+            "uid": "8",
+            "username": "duobao153713223"
+        },
+        "after": {
+            "uid": "8",
+            "username": "duobao153713223"
+        },
+        "time": "2016-08-22 17:47:25"
+    }
+body = json.dumps(body)
+set_data(body)
 
 
 
