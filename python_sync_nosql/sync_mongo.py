@@ -80,7 +80,7 @@ def set_data(body):
 
             if data.get('eventType')=='INSERT':
                 posts.insert( data.get('after') )
-                # posts.save(data.get('table'))
+                # posts.save(data.get('after'))
 
             elif data.get('eventType')=='UPDATE':
                 posts.update( { coll:pid } , {'$set': data.get('after') } )
