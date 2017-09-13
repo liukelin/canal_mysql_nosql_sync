@@ -3,7 +3,7 @@
 # @author: liukelin  314566990@qq.com
 
 '''
-  将数据写入到 redis
+  将数据写入到 nosql
   startup
 
 '''
@@ -14,4 +14,4 @@ import get_rabbitmq
 
 print(' ====liukelin==== ')
 print(' [*] Waiting for messages. To exit press CTRL+C')
-get_rabbitmq.get_mq()
+get_rabbitmq.consumer_data()
