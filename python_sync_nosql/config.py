@@ -36,16 +36,17 @@ redis_cache_map = {
 
 # mongoDB
 mongo_host = '127.0.0.1'
-mongo_port = 
+mongo_port = 27017
 # 指定表唯一主键（根据此值更新）
 mongo_cache_map = {
     # db
     'test':{  
-            # table      
-            'users':'uid' 
+            # table1     
+            'users':'uid',
+            # table2
             'users_info':'tid'
-          }
-    # db
+          },
+    # db2
     'test2':{  
             # table      
             'users':'tid'
