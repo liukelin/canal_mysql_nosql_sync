@@ -60,7 +60,6 @@ def set_data(body):
 
         # 指定数据库(db)
         dbc = client.db
-
         # 指定集合(表)
         posts = dbc.table
 
@@ -80,16 +79,13 @@ def set_data(body):
                 return False
 
             if data.get('eventType')=='INSERT':
-
                 posts.insert( data.get('after') )
                 # posts.save(data.get('table'))
 
             elif data.get('eventType')=='UPDATE':
-
-                collection.update( { coll:pid } , {'$set': data.get('after') } )
+                posts.update( { coll:pid } , {'$set': data.get('after') } )
 
             elif data.get('eventType')=='DELETE':
-
                 posts.remove( { coll:pid } )
 
             # try:
