@@ -41,35 +41,39 @@ def conn_redis():
 def set_data(body):
 	if not body or body=='':
 		return False
+
 	data = json.loads(body)
 	if isinstance(data, (dict)) == False:
 		return False
 
 
-	if data.has_key('eventType') and data.has_key('after') and data.has_key('db') and data.has_key('table'):
-		redis_cache_map = config.get('redis_cache_map')
+	if 'eventType' in data and 'after' in data and 'db' in data and 'table' in data:
 
-		if redis_cache_map.has_key(data['db']) and redis_cache_map[data['db']].has_key(data['table']):
-			key = "%s_%s_%s" %(data['db'], data['table'], redis_cache_map[data['db']][data['table']])
+		redis_cache_map = config.redis_cache_map
+		db = data.get('db')
+		table = data.get('table')
+
+		if mongo_cache_map.get(db) and mongo_cache_map.get(db).get(table):
+			key = "%s_%s_%s" %(db, table, data.get(redis_cache_map.get(db).get(table)) )
 		else:
 			return False
 
-		if data.get('eventType') in ['UPDATE', 'INSERT', 'DELETE'] and isinstance(data['after'], (dict)):
-			
+		if data.get('eventType') in ['UPDATE', 'INSERT', 'DELETE'] and isinstance(data.get('after'), (dict)):
+
 			if not redisConn:
 				conn_redis()
 
 			if data.get('eventType')=='INSERT':
 
-				redisConn.hmset(key, data['after'])
+				redisConn.hmset(key, data.get('after'))
 
-			else if data.get('eventType')=='UPDATE':
+			elif data.get('eventType')=='UPDATE':
 
-				redisConn.hmset(key, data['after'])
+				redisConn.hmset(key, data.get('after'))
 
-			else if data.get('eventType')=='DELETE':
+			elif data.get('eventType')=='DELETE':
 
-				redisConn.del(key)
+				redisConn.delete(key)
 
 			# try:
 			# 	redisConn.hmset(key, data['after'])
