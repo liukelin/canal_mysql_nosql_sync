@@ -95,7 +95,7 @@ mysql配置：
 	canal server 模拟mysql从库并向mysql发送dump命令获取mysql binlog数据。
 	
 	1.下载解压项目，这里提供了1.0.22版本:
-	[canal.deployer-1.0.22.tar.gz](https://github.com/liukelin/canal_mysql_nosql_sync/files/426724/canal.deployer-1.0.22.tar.gz) 
+	[canal.deployer-1.0.22.tar.gz](https://github.com/liukelin/canal_mysql_nosql_sync/releases) 
 	可从阿里项目下载最新版本 deployer ：
 	[https://github.com/alibaba/canal/releases](https://github.com/alibaba/canal/releases)
 	
