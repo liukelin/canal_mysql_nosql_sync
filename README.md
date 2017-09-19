@@ -24,7 +24,8 @@
 
 	                    ->redis(无数据)->返回空
 	
-	7.可将它视为一个触发器，binlog为记录触发事件，canal的作用是将事件实时通知出来，并将binlog解析成了所有语言可读的工具，在事件传输的各个环节 提高 可用性 和 扩展性 （加入MQ等方法）最终提高系统的稳定。
+	7.可将它视为一个触发器，binlog为记录触发事件，canal的作用是将事件实时通知出来，并将binlog解析成了所有语言可读的工具。
+	在事件传输的各个环节 提高 可用性 和 扩展性 （加入MQ等方法）最终提高系统的稳定。
 
 
 
@@ -93,8 +94,9 @@ mysql配置：
 	
 	canal server 模拟mysql从库并向mysql发送dump命令获取mysql binlog数据。
 	
-	1.下载解压项目，这里提供了1.0.22版本:canal.deployer-1.0.22.tar.gz(https://github.com/liukelin/canal_mysql_nosql_sync/files/426724/canal.deployer-1.0.22.tar.gz) 
-	可从阿里项目下载最新版本 deployer ：https://github.com/alibaba/canal/releases
+	1.下载解压项目，这里提供了1.0.22版本:canal.deployer-1.0.22.tar.gz
+[https://github.com/liukelin/canal_mysql_nosql_sync/files/426724/canal.deployer-1.0.22.tar.gz](https://github.com/liukelin/canal_mysql_nosql_sync/files/426724/canal.deployer-1.0.22.tar.gz) 
+	可从阿里项目下载最新版本 deployer ：[https://github.com/alibaba/canal/releases](https://github.com/alibaba/canal/releases)
 	
 	2.配置项目：
 		# 公共配置
@@ -132,7 +134,8 @@ mysql配置：
 	
 	binlog生产端和消费端的之间，增加MQ作为缓冲，增加容错度和动态扩展性
 	
-	1.下载解压项目，这里自己写了个基于1.0.22版本的项目:canal_client1.0.22.zip(https://github.com/liukelin/canal_mysql_nosql_sync/releases ), 源码查看：canal-client
+	1.下载解压项目，这里自己写了个基于1.0.22版本的项目:canal_client1.0.22.zip
+	(https://github.com/liukelin/canal_mysql_nosql_sync/releases ), 源码查看：canal-client
 		
 	2.基本配置
 		
