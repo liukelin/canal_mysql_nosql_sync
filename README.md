@@ -94,8 +94,7 @@ mysql配置：
 	
 	canal server 模拟mysql从库并向mysql发送dump命令获取mysql binlog数据。
 	
-	1.下载解压项目，这里提供了1.0.22版本:canal.deployer-1.0.22.tar.gz
-[https://github.com/liukelin/canal_mysql_nosql_sync/files/426724/canal.deployer-1.0.22.tar.gz](https://github.com/liukelin/canal_mysql_nosql_sync/files/426724/canal.deployer-1.0.22.tar.gz) 
+	1.下载解压项目，这里提供了1.0.22版本:[canal.deployer-1.0.22.tar.gz](https://github.com/liukelin/canal_mysql_nosql_sync/files/426724/canal.deployer-1.0.22.tar.gz) 
 	可从阿里项目下载最新版本 deployer ：[https://github.com/alibaba/canal/releases](https://github.com/alibaba/canal/releases)
 	
 	2.配置项目：
@@ -119,12 +118,12 @@ mysql配置：
 		
 		保存退出。
 		
-		更多配置查看：http://agapple.iteye.com/blog/1831873
+		更多配置查看：[http://agapple.iteye.com/blog/1831873](http://agapple.iteye.com/blog/1831873)
 		
 	3.启动：
 		$ sh bin/startup.sh
 		
-	日志文件：$ less logs/canal/canal.log	    # canal server端运行日志
+	日志文件： $ less logs/canal/canal.log	 # canal server端运行日志
 		  $ less logs/example/example.log   # canal client端连接日志
 		  $ logs/example/meta.log 	    # 实例binlog 读取记录文件（记录变更位置，默认为新增变更(tail)）
 
@@ -134,8 +133,8 @@ mysql配置：
 	
 	binlog生产端和消费端的之间，增加MQ作为缓冲，增加容错度和动态扩展性
 	
-	1.下载解压项目，这里自己写了个基于1.0.22版本的项目:canal_client1.0.22.zip
-	(https://github.com/liukelin/canal_mysql_nosql_sync/releases ), 源码查看：canal-client
+	1.下载解压项目，这里自己写了个基于1.0.22版本的项目:[canal_client1.0.22.zip](https://github.com/liukelin/canal_mysql_nosql_sync/releases )
+	源码查看：[canal-client](https://github.com/liukelin/canal_mysql_nosql_sync/tree/master/canal-client)
 		
 	2.基本配置
 		
@@ -272,11 +271,11 @@ mysql配置：
 │  ├─canal_client.jar   启动jar
 │  └─start_canal_client.sh     启动文件
 │  
-├─python_sync_nosql/        消费MQ binlog数据, 将数据写入到NoSql demo
+├─python_sync_nosql/        	消费MQ binlog数据, 将数据写入到NoSql demo
 │  ├─queue_rabbitmq.py 		rabbitmq 消费端
-│  ├─sync_redis.py 			写入到redis
-│  ├─sync_mongo.py 			写入到mongo
-│  ├─config.py 				配置
+│  ├─sync_redis.py 		写入到redis
+│  ├─sync_mongo.py 		写入到mongo
+│  ├─config.py 			配置
 │  └─startup.py         	启动入口
 └─
 
