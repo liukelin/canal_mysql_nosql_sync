@@ -118,7 +118,7 @@ mysql配置：
 		
 		保存退出。
 		
-		更多配置查看：[http://agapple.iteye.com/blog/1831873](http://agapple.iteye.com/blog/1831873)
+		更多配置查看:[http://agapple.iteye.com/blog/1831873](http://agapple.iteye.com/blog/1831873)
 		
 	3.启动：
 		$ sh bin/startup.sh
@@ -133,8 +133,8 @@ mysql配置：
 	
 	binlog生产端和消费端的之间，增加MQ作为缓冲，增加容错度和动态扩展性
 	
-	1.下载解压项目，这里自己写了个基于1.0.22版本的项目:[canal_client1.0.22.zip](https://github.com/liukelin/canal_mysql_nosql_sync/releases )
-	源码查看：[canal-client](https://github.com/liukelin/canal_mysql_nosql_sync/tree/master/canal-client)
+	1.下载解压项目，这里自己写了个基于1.0.22版本的项目:[canal_client1.0.22.zip](https://github.com/liukelin/canal_mysql_nosql_sync/releases)
+	源码查看:[canal-client](https://github.com/liukelin/canal_mysql_nosql_sync/tree/master/canal-client)
 		
 	2.基本配置
 		
