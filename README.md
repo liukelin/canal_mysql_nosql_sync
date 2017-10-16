@@ -76,7 +76,7 @@ mysql配置：
 		$ sudo vim /etc/my.cnf
 		
 		[mysqld]  
-		log-bin=mysql-bin # 
+		log-bin=mysql-bin #binlog文件名（也可以使用绝对路径）
 		binlog-format=ROW #选择row模式  
 		server_id=1 	  #实例唯一ID，不能和canal的slaveId重复
 	
