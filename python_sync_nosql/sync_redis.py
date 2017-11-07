@@ -42,10 +42,12 @@ def set_data(body):
 	if not body or body=='':
 		return False
 
+	body = body.replace("'", "\"");
+
 	data = json.loads(body)
 	if isinstance(data, (dict)) == False:
 		return False
-
+	# print(data)
 
 	if 'eventType' in data and 'after' in data and 'db' in data and 'table' in data:
 
@@ -53,7 +55,7 @@ def set_data(body):
 		db = data.get('db')
 		table = data.get('table')
 
-		if mongo_cache_map.get(db) and mongo_cache_map.get(db).get(table):
+		if redis_cache_map.get(db) and redis_cache_map.get(db).get(table):
 			key = "%s_%s_%s" %(db, table, data.get(redis_cache_map.get(db).get(table)) )
 		else:
 			return False
