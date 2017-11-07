@@ -53,7 +53,7 @@ def set_data(body, client=None):
     if 'eventType' in data and 'after' in data and 'db' in data and 'table' in data:
         
         if not client:
-            Conn()
+            client = Conn()
 
         mongo_cache_map = config.mongo_cache_map
         db = data.get('db')
@@ -74,7 +74,7 @@ def set_data(body, client=None):
             # 获取更新条件唯一值
             if mongo_cache_map.get(db) and mongo_cache_map.get(db).get(table):
                 coll = mongo_cache_map.get(db).get(table)
-                pid = data.get(coll)
+                pid = data.get('after').get(coll)
 
             else:
                 return False
