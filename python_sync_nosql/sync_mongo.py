@@ -17,6 +17,7 @@ client=False
 def Conn():
     client = MongoClient(config.mongo_host, config.mongo_port)
     print(client)
+    return client
 
 '''
  ·将数据写入到 mongo
@@ -41,7 +42,7 @@ def Conn():
         "time": "2016-08-22 17:47:25"
     }
 '''
-def set_data(body):
+def set_data(body, client=None):
 
     if not body or body=='':
         return False

@@ -13,11 +13,18 @@ import redis
 import json
 
 
-redisConn=False
+# redisConn=False
 def conn_redis():
-	pool = redis.ConnectionPool(host=redis_host, port=redis_port, db=0)
-	redisConn = redis.Redis(ConnectionPool=pool)
-	print(redisConn, redisConn.ping())
+	conf = {
+		    "host": config.redis_host,
+		    "port": config.redis_port,
+		    "db": 0
+	    }
+	# pool = redis.ConnectionPool(**conf)
+	# redisConn = redis.Redis(ConnectionPool=pool)
+	redisConn = redis.Redis(**conf)
+	# print(redisConn, redisConn.ping())
+	return redisConn
 
 '''
  ·将数据写入到redis
@@ -38,16 +45,23 @@ def conn_redis():
 	    "time": "2016-08-22 17:47:25"
 	}
 '''
-def set_data(body):
+def set_data(body, redisConn=None):
 	if not body or body=='':
 		return False
 
-	body = body.replace("'", "\"");
+	try:
+		# 如果是bytes
+		body = str(body, encoding = "utf-8")
+	except:
+		pass
+
+	# 有可能是单引号json
+	body = body.replace("'", "\"")
 
 	data = json.loads(body)
 	if isinstance(data, (dict)) == False:
 		return False
-	# print(data)
+	print(data)
 
 	if 'eventType' in data and 'after' in data and 'db' in data and 'table' in data:
 
@@ -55,15 +69,16 @@ def set_data(body):
 		db = data.get('db')
 		table = data.get('table')
 
+
 		if redis_cache_map.get(db) and redis_cache_map.get(db).get(table):
-			key = "%s_%s_%s" %(db, table, data.get(redis_cache_map.get(db).get(table)) )
+			key = "%s_%s_%s" %(db, table, data.get('after').get(redis_cache_map.get(db).get(table)) )
 		else:
 			return False
 
-		if data.get('eventType') in ['UPDATE', 'INSERT', 'DELETE'] and isinstance(data.get('after'), (dict)):
+		if data.get('eventType') in ['UPDATE', 'INSERT', 'DELETE'] and data.get('after') and isinstance(data.get('after'), (dict)):
 
 			if not redisConn:
-				conn_redis()
+				redisConn = conn_redis()
 
 			if data.get('eventType')=='INSERT':
 
@@ -86,6 +101,10 @@ def set_data(body):
 
 	return False
 
+if __name__=="__main__":
+	strs = """{'binlog': 'mysql-bin.000007:5078', 'db': 'zhou', 'table': 'uc_admin', 'eventType': 'UPDATE', 'before': {'create_id': '', 'create_time': '0000-00-00 00:00:00.000', 'id': '9', 'language_code': '', 'password': 'e10adc3949ba59abbe56e057f20f883e', 'status': '1', 'update_id': '', 'update_time': '0000-00-00 00:00:00.000', 'username': 'aa'}, 'after': {'create_id': '', 'create_time': '0000-00-00 00:00:00.000', 'id': '9', 'language_code': '', 'password': 'e10adc3949ba59abbe56e057f20f883e', 'status': '1', 'update_id': '', 'update_time': '0000-00-00 00:00:00.000', 'username': 'aab'}, 'time': '2017-11-07 21:24:56'}"""
+	set_data(strs)
+	# conn_redis()
 
 '''
 {

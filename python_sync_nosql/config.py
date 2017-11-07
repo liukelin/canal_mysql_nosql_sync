@@ -30,7 +30,10 @@ redis_cache_map = {
 	'test':{  
 	        # table      
 			'users':'uid'
-		  }
+		  },
+    'zhou':{
+            'uc_admin':'id'
+         }
 }
 
 
