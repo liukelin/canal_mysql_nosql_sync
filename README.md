@@ -76,7 +76,7 @@ mysql配置：
 		$ sudo vim /etc/my.cnf
 		
 		[mysqld]  
-		log-bin=mysql-bin # 
+		log-bin=mysql-bin #binlog文件名（也可以使用绝对路径）
 		binlog-format=ROW #选择row模式  
 		server_id=1 	  #实例唯一ID，不能和canal的slaveId重复
 	
@@ -94,8 +94,10 @@ mysql配置：
 	
 	canal server 模拟mysql从库并向mysql发送dump命令获取mysql binlog数据。
 	
-	1.下载解压项目，这里提供了1.0.22版本:[canal.deployer-1.0.22.tar.gz](https://github.com/liukelin/canal_mysql_nosql_sync/files/426724/canal.deployer-1.0.22.tar.gz) 
-	可从阿里项目下载最新版本 deployer ：[https://github.com/alibaba/canal/releases](https://github.com/alibaba/canal/releases)
+	1.下载解压项目，这里提供了1.0.22版本:
+	[canal.deployer-1.0.22.tar.gz](https://github.com/liukelin/canal_mysql_nosql_sync/releases) 
+	可从阿里项目下载最新版本 deployer ：
+	[https://github.com/alibaba/canal/releases](https://github.com/alibaba/canal/releases)
 	
 	2.配置项目：
 		# 公共配置
@@ -118,7 +120,8 @@ mysql配置：
 		
 		保存退出。
 		
-		更多配置查看:[http://agapple.iteye.com/blog/1831873](http://agapple.iteye.com/blog/1831873)
+		更多配置查看:
+		[http://agapple.iteye.com/blog/1831873](http://agapple.iteye.com/blog/1831873)
 		
 	3.启动：
 		$ sh bin/startup.sh
@@ -133,8 +136,10 @@ mysql配置：
 	
 	binlog生产端和消费端的之间，增加MQ作为缓冲，增加容错度和动态扩展性
 	
-	1.下载解压项目，这里自己写了个基于1.0.22版本的项目:[canal_client1.0.22.zip](https://github.com/liukelin/canal_mysql_nosql_sync/releases)
-	源码查看:[canal-client](https://github.com/liukelin/canal_mysql_nosql_sync/tree/master/canal-client)
+	1.下载解压项目，这里自己写了个基于1.0.22版本的项目:
+	[canal_client1.0.22.zip](https://github.com/liukelin/canal_mysql_nosql_sync/releases)
+	
+	源码查看: [canal-client](https://github.com/liukelin/canal_mysql_nosql_sync/tree/master/canal-client)
 		
 	2.基本配置
 		
