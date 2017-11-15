@@ -6,6 +6,7 @@
 
  消费 数据 写入到redis
 
+ 没用上 conn_redis 重用。。。以后再补了
 '''
 import os
 import config
