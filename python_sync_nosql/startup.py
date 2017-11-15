@@ -10,7 +10,7 @@
 import os
 import config
 import pika
-import get_rabbitmq
+import queue_rabbitmq
 
 print(' ====liukelin==== ')
 print(' [*] Waiting for messages. To exit press CTRL+C')
