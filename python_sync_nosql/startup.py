@@ -14,4 +14,4 @@ import queue_rabbitmq
 
 print(' ====liukelin==== ')
 print(' [*] Waiting for messages. To exit press CTRL+C')
-get_rabbitmq.consumer_data()
+queue_rabbitmq.consumer_data()

@@ -35,9 +35,11 @@ def consumer_data():
 	def callback(ch, method, properties, body):
 
 		# set data
-		ack = sync_data.set_data(body)
+		ack = sync_data.set_data(body) 
 
-	    ch.basic_ack(delivery_tag = method.delivery_tag) # ACK 确认
+		# ACK 确认
+		ch.basic_ack(delivery_tag = method.delivery_tag)
+
 
 
 	channel.basic_qos(prefetch_count=1) # 允许暂留Unacked数量，（数据未basic_ack前 数据保存在Unacked允许的最大值）
