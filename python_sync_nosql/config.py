@@ -8,7 +8,8 @@ rabbitmq_port = 5672
 # rabbitmq 账号密码（远程访问禁止使用 guest账号）
 rabbitmq_user = 'test'    
 rabbitmq_pass = '123456'
-rabbitmq_queue_name = 'binlog_test'
+# 与canal里面配置的队列名一样 
+rabbitmq_queue_name = 'canal_binlog_data'
 
 
 #binlog_dir = '/Users/liukelin/Desktop/canal-otter-mycat-cobar/canal_object/data' # 文件路径
