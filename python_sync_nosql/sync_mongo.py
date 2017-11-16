@@ -70,9 +70,11 @@ def set_data(body, client=None):
         table = data.get('table')
 
         # 指定数据库(db)
-        dbc = client.db
+        # dbc = client.(db)
+        dbc = client.get_database(db)
         # 指定集合(表)
-        posts = dbc.table
+        # posts = dbc.(table)
+        posts = dbc.get_collection(table)
 
         if not posts:
             return False
