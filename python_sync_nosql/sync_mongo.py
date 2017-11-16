@@ -46,6 +46,16 @@ def set_data(body, client=None):
 
     if not body or body=='':
         return False
+
+    try:
+        # 如果是bytes
+        body = str(body, encoding = "utf-8")
+    except:
+        pass
+    # 这个位置粗略的处理了下单引号json 实际可以再做处理
+    # 有可能是单引号json
+    body = body.replace("'", "\"")
+
     data = json.loads(body)
     if isinstance(data, (dict)) == False:
         return False
