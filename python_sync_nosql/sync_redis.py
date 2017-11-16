@@ -56,6 +56,7 @@ def set_data(body, redisConn=None):
 	except:
 		pass
 
+	# 这个位置粗略的处理了下单引号json 实际可以再做处理
 	# 有可能是单引号json
 	body = body.replace("'", "\"")
 
