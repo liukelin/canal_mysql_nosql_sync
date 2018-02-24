@@ -1,6 +1,6 @@
 /**
  * @author liukelin
- * rpush / lpop 
+ * lpush / rpop 
  */
 package canal.client;
 
