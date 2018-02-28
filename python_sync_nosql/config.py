@@ -23,6 +23,7 @@ sync_db = 'redis'
 # redis
 redis_host = '127.0.0.1'
 redis_port = 6379
+# redis_password = ''
 
 # 指定保存到redis的key，指定每个db-table的 key
 # 这里的demo是将db表数据映射到 redis hash 结构，key=db:table:primary_id
