@@ -196,7 +196,7 @@ mysql配置：
 
         {"binlog":"mysql-bin.000009:1790","db":"test","table":"users","eventType":"INSERT","before":"","after":{"uid":"9","username":"test2"},"time":"2016-08-22 17:48:45"}
 
-消费数据：（这里使用python3/rabbitmq/redis 作为案例，实际可根据业务需求）
+消费数据demo：（这里使用python3 消费rabbitmq同步到redis 作为案例，实际可根据业务需求，因为此时所需要的数据已是通用的json格式，无限可能）
         
 	流程 ：file数据-> MQ -> nosql
 	
