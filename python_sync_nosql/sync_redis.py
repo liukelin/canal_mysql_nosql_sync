@@ -16,9 +16,11 @@ import json
 
 # redisConn=False
 def conn_redis():
+	redis_password = if config.get('redis_password') else ''
 	conf = {
 		    "host": config.redis_host,
 		    "port": config.redis_port,
+		    "password": redis_password,
 		    "db": 0
 	    }
 	# pool = redis.ConnectionPool(**conf)
