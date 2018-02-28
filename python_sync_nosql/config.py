@@ -28,12 +28,12 @@ redis_port = 6379
 # 这里的demo是将db表数据映射到 redis hash 结构，key=db:table:primary_id
 redis_cache_map = {
     # db
-	'test':{  
+	'test_db1':{  
 	        # table      
-			'users':'uid'
+			'test_table':'test_id'
 		  },
-    'zhou':{
-            'uc_admin':'id'
+    'test_db2':{
+            'test_table2':'test_id2'
          }
 }
 
