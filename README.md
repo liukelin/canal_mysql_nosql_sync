@@ -307,6 +307,8 @@ mysql配置：
  阿里canal项目原始地址：[https://github.com/alibaba/canal](https://github.com/alibaba/canal)
  
  数据消费写入nosql例子: python_sync_nosql 这里是消费rabbitmq数据最终同步到redis
+ 
+ 说明：[https://www.aliyun.com/jiaocheng/1114823.html?spm=5176.100033.2.18.hXjlSb](使用canal和canal_mysql_nosql_sync同步mysql数据)
 
 
 
