@@ -310,5 +310,6 @@ mysql配置：
  
  其他说明：[使用canal和canal_mysql_nosql_sync同步mysql数据](https://www.aliyun.com/jiaocheng/1114823.html?spm=5176.100033.2.18.hXjlSb)
 
+使用golang语言开发的版本：[https://github.com/liukelin/bubod](https://github.com/liukelin/bubod)
 
 
