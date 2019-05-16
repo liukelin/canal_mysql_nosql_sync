@@ -286,7 +286,7 @@ mysql配置：
 
 ~~~
 
-	总结：
+## 总结
 	
 	1.使用MQ作为传输，可提高容错度，并且可以起到一个消费速度的缓冲，在程序上加上对队列积压数据的监控，可实时增加或减少MQ消费进程的数量。
 	
@@ -296,8 +296,9 @@ mysql配置：
 	
 	4.接下来我会继续完善otter的实际案例 ...
 	
-	5.这里有个用golang实现的binlog解析的项目 [https://github.com/liukelin/bubod](https://github.com/liukelin/bubod)
 
+## 其他
+ 这里有个用golang实现的binlog解析的项目: [https://github.com/liukelin/bubod](https://github.com/liukelin/bubod)
 
 <h1>资源下载</h1>
 
