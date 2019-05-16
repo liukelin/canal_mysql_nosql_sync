@@ -294,7 +294,9 @@ mysql配置：
 	
 	3.为了避免多进程对MQ消费速度的时序先后不可控，建议binlog数据只作为触发条件（使用id从mysql获取最新数据）作为数据使用，而不作为具体数据使用。
 	
-	4. 接下来我会继续完善otter的实际案例 ...
+	4.接下来我会继续完善otter的实际案例 ...
+	
+	5.这里有个用golang实现的binlog解析的项目 [https://github.com/liukelin/bubod](https://github.com/liukelin/bubod)
 
 
 <h1>资源下载</h1>
