@@ -290,7 +290,7 @@ public class CanalClientTest {
             	
             	//获取字段值 
                 if (eventType == EventType.DELETE) {  
-                	after = printColumn(rowData.getBeforeColumnsList());  
+                	before = printColumn(rowData.getBeforeColumnsList());  
                 } else if (eventType == EventType.INSERT) {  
                 	after = printColumn(rowData.getAfterColumnsList());  
                 } else {  //update
