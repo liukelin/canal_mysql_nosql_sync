@@ -1,6 +1,6 @@
 /**
  * @author liukelin
- * rpush / lpop 
+ * lpush / rpop 
  */
 package canal.client;
 
@@ -34,7 +34,7 @@ public class redis {
     	
     	Jedis jedis = new Jedis(host, port);
         for(int i=0;i<argv.length;i++){
-        	jedis.rpush(queuename, argv[i]);
+        	jedis.lpush(queuename, argv[i]);
         }
         
 	}
